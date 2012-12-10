@@ -1,0 +1,146 @@
+body{
+    font-family: Calibri, Arial, sans-serif;
+    text-align:center;
+    font-size:16px;
+    text-align:center;
+}
+#container {
+    width:992px;
+    margin:0 auto;
+    text-align:left;
+    border:#009AF4 solid 1px;
+}
+#header {
+    background-image:url('/fileadmin/templates/main/images/banner.png');
+    width:992px;
+    display:block;
+    height:123px;
+}
+#container, #header {
+	border-radius: 15px;
+	-moz-border-radius: 15px;
+	-khtml-border-radius: 15px;
+	-webkit-border-radius: 15px;
+}
+#content {
+    margin-top:0;
+    border-top:none;
+}
+nav {
+    background-color: #009AF4;
+    display:block;
+    color:#000;
+}
+nav ul {
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+nav ul li {
+    display:inline-block;
+    *display:inline; /*IE7 hack*/
+    border-style: solid;
+    border-width: 0 1px;
+    border-color: white;
+}
+nav ul li:last-child{
+    border-right: none;
+}
+nav ul li:first-child{
+    border-left: none;
+}
+nav a {
+    display:inline-block;
+    padding:1.5px 13px 3px;
+    text-decoration:none;
+    color:#FFF;
+}
+nav a:hover {
+    color:#FDD40A;
+}
+.active {
+    color:#FDD40A;
+}
+.active a {
+    color:#FDD40A;
+}
+#leftColumn{
+    width:20%;
+    float:left;
+    display:block;
+    padding:1%;
+}
+#leftColumn ul {
+	margin:0;
+	padding:0;
+}
+#leftColumn ul  li{
+    background-color: #1C8F30;
+    margin-bottom: 1px;
+    margin-top: 0;
+}
+#leftColumn a{
+	color:#FFF;
+	text-decoration:none;
+	width:inherit!important;
+	padding:5px;
+	display:block;
+}
+#leftColumn .active a, #leftColumn .subActive a, #leftColumn a:hover {
+	background-color:#009AF4;
+    color:#FDD40A;
+    cursor: pointer;
+	display:block;
+}
+#leftColumn ul > ul{
+    margin-left:10px;
+}
+#center{
+    width:76%;
+    float:left;
+    display:block;
+    padding:0 1%;
+}
+#center > div{
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+h1 {
+    color: #1C8F30;
+    font-size: 1.3em;
+    margin: 0;
+    padding: 0;
+}
+.clear {
+    clear:both;
+}
+ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+#todaysForecast h1 {
+	background-color:#1C8F30;
+	color:#FFF;
+}
+#todaysForecast img {
+	float:left;
+}
+#todaysForecast .row {
+	background-color:#DBEAF9;
+}
+#todaysForecast .min {
+	color:#009AF4;
+}
+#todaysForecast .max {
+	color:#FF0000;
+}
+table{
+    border-collapse:collapse;
+}
+footer{
+    display: block;
+    padding: 5px 0px 5px 10px;
+    border-top:#009AF4 solid 1px;
+}
+
