@@ -1,0 +1,4 @@
+/* custom styles only for the locations tab */
+#locationsTable td {
+	padding:0.2em 1em;
+}
