@@ -1,16 +1,31 @@
-<div id="headlines">
-<h1>Today's weather - <span class="black">{date}</span></h1>
-<h1>Headline - <span class="black">{headline}</span></h1>
-<h1>Severe Weather - <span class="black">{severe_weather}</span></h1>
+<div id="map">
+<div id="customZoom">
+	<a href="#customZoomIn" id="customZoomIn">+</a>
+	<a href="#customZoomOut" id="customZoomOut">-</a>
 </div>
-
+</div>
+<div id="headlines">
+	<h1>
+		Today's weather <br> 
+		<span class="black">{date}</span>
+	</h1>
+	<h1>
+		Headline <br>
+		<span class="black">{headline}</span>
+	</h1>
+	<h1>
+		Severe Weather <br>
+		<span class="black">{severe_weather}</span>
+	</h1>
+</div>
+<div class="clear gap"><!-- --></div>
 <div id="todaysForecast">
 	<h1>Local Weather Forecast</h1>
 	<table width='100%'>
 		<tr>
 			<th>Location</th>
-			<th>Morning</th>
-			<th>Afternoon</th>
+			<th class="period">Morning</th>
+			<th class="period">Afternoon</th>
 
 		</tr>
 		<f:for each="{locations}" as="location">
@@ -21,8 +36,7 @@
 				<f:for each="{period.detail}" as="detail">
 					<img src="typo3conf/ext/forecastBackend/img/{detail.icon}">
 					{detail.text} <br>
-					<span class="min">Min Temp {detail.minTemp}&deg;C</span> <span class="max">Max Temp {detail.maxTemp}&deg;C</span><br>
-					Wind {detail.windSpeed} {detail.windDirection}
+					<span class="min">Min {detail.minTemp}&deg;C</span>, <span class="max">Max {detail.maxTemp}&deg;C</span>, Wind {detail.windSpeed} {detail.windDirection}
 				</f:for>
 			</td>
 			</f:for>

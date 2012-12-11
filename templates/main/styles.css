@@ -115,19 +115,85 @@ h1 {
 .clear {
     clear:both;
 }
+.gap {
+	display:block;
+	height:1em;
+}
 ul {
     list-style-type: none;
     padding-left: 0;
 }
+/* ################ [HOMEPAGE SPECIFIC] #################*/
+#headlines {
+	width:40%;
+	float:left;
+}
 #headlines h1 {
 	font-size:1.1em;
+	margin-bottom: 1em;
 }
 #headlines .black {
 	color:#000;
 }
+#map {
+	width:60%;
+	height:22em;
+	float: right;
+}
+/* ----- custom zoom controls, because we can & it looks cooler than the defaults :D --------*/
+.olControlAttribution {
+	bottom: 5px;
+	font-size: 9px;
+}
+#customZoom {
+	z-index: 1001;
+	position: relative;
+	top: 10px;
+	left: 10px;
+}
+#customZoom a {
+	text-decoration: none;
+	position: absolute;
+	display: block;
+	width: 25px;
+	text-align: center;
+	font-weight: bold;
+	color: #fff;
+	background: #369;
+	border: 1px solid #ccc;
+	border-radius: 7px;
+	-moz-border-radius: 7px;
+	-khtml-border-radius: 7px;
+	-webkit-border-radius: 7px;
+}
+#customZoom a:hover {
+	background: #036;
+}
+#customZoomOut {
+	top: 25px;
+}
+/* ---------------------------------------------------------------------------------------*/
+/* make the table look pretty... */
 #todaysForecast h1 {
 	background-color:#1C8F30;
 	color:#FFF;
+	border-top-left-radius:10px;
+	-moz-border-radius-topleft:10px;
+	border-top-right-radius:10px;
+	-moz-border-radius-topright:10px;
+	padding-left:0.5em;
+}
+#todaysForecast table {
+	border: 1px solid #000;
+}
+#todaysForecast th, #todaysForecast td {
+	padding:0 0.5em;
+}
+#todaysForecast th{
+	background-color:#DADADA;
+}
+#todaysForecast .period {
+	text-align:center;
 }
 #todaysForecast img {
 	float:left;
@@ -141,6 +207,10 @@ ul {
 #todaysForecast .max {
 	color:#FF0000;
 }
+#todaysForecast {
+	margin-bottom:1em;
+}
+/* ################ [HOMEPAGE SPECIFIC] #################*/
 table{
     border-collapse:collapse;
 }
