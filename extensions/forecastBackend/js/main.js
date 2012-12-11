@@ -11,8 +11,8 @@ var f = {
 	defaultClickEvents: function () {
 		f.forecast.init();
 		$('#forecastTab').click(function () {
-			$('.tab').removeClass('active');
-			$(this).addClass('active');
+			$('.tab').removeClass('active'); // if we add another tab, it'll mae sense to move this line & the one below, outside 
+			$(this).addClass('active'); //      as it's the same actions for both, (it's the same number of lines with only 2 tabs)
 			$('#forecast').show();
 			$('#locationsManagement').hide();
 			f.forecast.init();
@@ -28,7 +28,6 @@ var f = {
 	makeElement: function (element, content, attr, attrValue) {
 		// creates an element which can then be attached to the dom
 		// this the the proper way of doing it! rather than "output += '<td>something</td>'" etc
-		// TODO, make a similar function (or one that calls this one) to deal with multiple elements (i.e for tables! - tds)
 		var el = document.createElement(element);
 		// JsLint moans about typeof, but it's correct, jsLint is wrong, typeof is the right way until 'undefined' becomes a special word in all browsers (read:when IE8 dies..)
 		if (typeof(content) !== 'undefined' && content !== '') {
