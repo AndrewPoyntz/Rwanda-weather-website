@@ -252,7 +252,7 @@ var f = {
 		issue: function (form) {
 			$.ajax({
 				type: 'POST',
-				url: ext_loc + 'processor_locationIssue.php',
+				url: ext_loc + 'processor_forecastIssue.php',
 				data: form.serialize(),
 				success: function (data) {
 					if (data.result) {
