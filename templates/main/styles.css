@@ -119,6 +119,12 @@ ul {
     list-style-type: none;
     padding-left: 0;
 }
+#headlines h1 {
+	font-size:1.1em;
+}
+#headlines .black {
+	color:#000;
+}
 #todaysForecast h1 {
 	background-color:#1C8F30;
 	color:#FFF;

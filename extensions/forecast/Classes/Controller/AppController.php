@@ -8,13 +8,12 @@ extends Tx_Extbase_MVC_Controller_ActionController {
 	/**
 	* @return string The rendered view
 	*/
-	private function getLocations(){
-		//$today = date ('Y-m-d');
-		$today = "2012-12-10";
-		$current_forecast_Q = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'forecasts', "issue_time='".$today."'" , '', 'published');
-		while ($current_forecast = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($current_forecast_Q)){
-			$forecast_id = $current_forecast['id'];
-		}
+	private function getCurrentForecast($date){
+		$current_forecast_Q = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'forecasts', "issue_time='".$date."'" , '', 'published');
+		return $current_forecast_Q;
+	}
+	private function getLocations($forecast_id){		
+		
 		//echo "forecast id: ". $forecast_id ."<br>";
 		$i = 0;
 		$locations_array = array();
@@ -70,7 +69,18 @@ extends Tx_Extbase_MVC_Controller_ActionController {
 		return $locations_array;
 	}
 	public function indexAction() {
-		$rows = $this->getLocations();
+		//$today = date('Y-m-d');
+		$today = "2012-12-10";
+		$current_forecast_Q = $this->getCurrentForecast($today);
+		while ($current_forecast = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($current_forecast_Q)){
+			$forecast_id = $current_forecast['id'];
+			$headline = $current_forecast['headline'];
+			$severe_weather = $current_forecast['severe_weather'];
+		}
+		$rows = $this->getLocations($forecast_id);
 		$this->view->assign('locations', $rows);
+		$this->view->assign('date', date('D jS F Y', strtotime($today)));
+		$this->view->assign('headline', $headline);
+		$this->view->assign('severe_weather', $severe_weather);
 	}
 }
