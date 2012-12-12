@@ -21,7 +21,7 @@
 <div class="clear gap"><!-- --></div>
 <div id="todaysForecast">
 	<h1>Local Weather Forecast</h1>
-	<table width='100%'>
+	<table>
 		<tr>
 			<th>Location</th>
 			<th class="period">Morning</th>
@@ -34,7 +34,7 @@
 			<f:for each="{location.periods}" as="period">
 			<td>
 				<f:for each="{period.detail}" as="detail">
-					<img src="typo3conf/ext/forecastBackend/img/{detail.icon}">
+					<img src="typo3conf/ext/forecastBackend/img/{detail.icon}" alt="{detail.icon_name}_icon">
 					{detail.text} <br>
 					<span class="min">Min {detail.minTemp}&deg;C</span>, <span class="max">Max {detail.maxTemp}&deg;C</span>, Wind {detail.windSpeed} {detail.windDirection}
 				</f:for>
