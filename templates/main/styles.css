@@ -171,6 +171,25 @@ ul {
 #customZoomOut {
 	top: 25px;
 }
+#tooltip {
+	position:absolute;
+	background-color:#FFF;
+	z-index:999999;
+	border:solid 2px #036;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-khtml-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	max-width:12em;
+	padding:0.2em;
+}
+#tooltip h1{
+	size:1.1em;
+}
+#tooltip p {
+	margin: 0;
+	padding: 0;
+}
 /* ---------------------------------------------------------------------------------------*/
 /* make the table look pretty... */
 #todaysForecast h1 {
