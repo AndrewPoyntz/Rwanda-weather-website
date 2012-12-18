@@ -172,6 +172,7 @@ ul {
 	top: 25px;
 }
 #tooltip {
+	display:none;
 	position:absolute;
 	background-color:#FFF;
 	z-index:999999;

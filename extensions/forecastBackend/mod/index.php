@@ -31,6 +31,7 @@ $ext_path = "/typo3conf/ext/".$_EXTKEY;
 			<div id="forecastUpdate" style="display:none;">
 				<div id="forecastCurrent">
 					<h3>Currently issued forecasts</h3>
+					<div id="forecastsTable"><!-- --></div>
 					<button class="forecastCancel">Cancel</button>
 				</div>
 				<div id="forecastEdit" style="display:none;">

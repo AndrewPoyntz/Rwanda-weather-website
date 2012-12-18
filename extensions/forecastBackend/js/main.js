@@ -30,13 +30,13 @@ var f = {
 		// this the the proper way of doing it! rather than "output += '<td>something</td>'" etc
 		var el = document.createElement(element);
 		// JsLint moans about typeof, but it's correct, jsLint is wrong, typeof is the right way until 'undefined' becomes a special word in all browsers (read:when IE8 dies..)
-		if (typeof(content) !== 'undefined' && content !== '') {
+		if (typeof (content) !== 'undefined' && content !== '') {
 			el.innerHTML = content;
 		}
-		if (typeof(attr) !== 'undefined' && typeof(attrValue) !== 'undefined') {
+		if (typeof (attr) !== 'undefined' && typeof (attrValue) !== 'undefined') {
 			el.setAttribute(attr, attrValue);
 		}
-		return el;		
+		return el;
 	},
 	showMessage: function (type, message) {
 		$('#message').stop().hide().removeClass('pass').removeClass('fail').addClass(type).html(message).fadeToggle('slow').delay(1000).fadeToggle('slow');
@@ -45,7 +45,6 @@ var f = {
 		init: function () {
 			this.registerEvents();
 		},
-		formInfo: [],
 		registerEvents: function () {
 			$('#forecastBtnNew').unbind().click(function () {
 				$('#forecastDefault').fadeOut(500);
@@ -57,8 +56,16 @@ var f = {
 			$('#forecastBtnUpdate').unbind().click(function () {
 				$('#forecastDefault').fadeOut(500);
 				$('#forecastUpdate').delay(500).fadeIn('slow');
+				f.forecast.getForecastList();
 				return false;
 			});
+			$('.forecastEdit').unbind().click( function () {
+				var id = $(this).parent().attr('data-id');
+				f.forecast.getFormInfo(id);
+				//f.forecast.buildForm.init('forecastEditForm');
+				f.forecast.showEdit();
+				return false;
+			})
 			$('.forecastCancel').click(function () {
 				f.forecast.showInitalScreen();
 				return false;
@@ -68,8 +75,59 @@ var f = {
 			$('#forecastNew, #forecastUpdate').fadeOut(500);
 			$('#forecastDefault').delay(500).fadeIn('slow');
 		},
+		getForecastList: function () {
+			$.ajax({
+				url: ext_loc + 'processor_forecastList.php',
+				async: false,
+				success: function (data) {
+					if (data.forecasts.length > 0) {
+						table = f.makeElement('table');
+						tr = f.makeElement('tr');
+						table.appendChild(tr);
+						th = f.makeElement('th', 'Date');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Headline');
+						//tr.appendChild(th);
+						//th = f.makeElement('th', 'Severe Weather');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Edit');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Delete');
+						tr.appendChild(th);
+						for (i = 0; i < data.forecasts.length; i++) {
+							forecast = data.forecasts[i];
+							if (i % 2 === 0) {
+								tr = f.makeElement('tr', '', 'class', 'row');
+							} else {
+								tr = f.makeElement('tr');
+							}
+							table.appendChild(tr);
+							td = f.makeElement('td', forecast.date);
+							tr.appendChild(td);
+							td = f.makeElement('td', forecast.headline);
+							tr.appendChild(td);
+							//td = f.makeElement('td', forecast.severeWeather);
+							//tr.appendChild(td);
+							td = f.makeElement('td', '', 'data-id', forecast.id);
+							tr.appendChild(td);
+							div = f.makeElement('div', '', 'class', 'icon edit');
+							td.appendChild(div);
+							td = f.makeElement('td', '', 'data-id', forecast.id);
+							tr.appendChild(td);
+							div = f.makeElement('div', '', 'class', 'icon delete');
+							td.appendChild(div);
+						}
+						$('#forecastsTable').html('').append(table);
+					} else {
+						$('#forecastsTable').html('There are no forecasts currently, please issue one!');
+					}
+				}
+			});
+			return false;
+		},
+		formInfo: [],
 		getFormInfo: function (edit, id) {
-			var data = (edit) ? 'id=' + id : '';
+			var data = edit ? 'id=' + id : '';
 			$.ajax({
 				url: ext_loc + 'processor_forecastForm.php',
 				data: data,
@@ -83,9 +141,9 @@ var f = {
 		},
 		buildForm: {
 			init: function (formDiv) {
-				var i, form, input, p, table, tr, td, th, data = f.forecast.formInfo;
+				var form, input, table, tr, td, th;
 				$('#' + formDiv).html('');
-				form = f.makeElement('form', '', 'id', 'issueForecastForm');
+				form = f.makeElement('form', '', 'id', formDiv);
 				table = f.makeElement('table');
 				//--------------------------------------
 				tr = f.makeElement('tr');
@@ -121,31 +179,30 @@ var f = {
 				td.appendChild(input);
 				tr.appendChild(td);
 				form.appendChild(table);
-				for (i = 0; i < data.periods.length; i++) {
-					period = data.periods[i];
-					p = f.makeElement('p', period.name, 'class', 'forecastPeriod');
-					table = f.makeElement('table');
-					tr = f.makeElement('tr');
-					table.appendChild(tr);
-					th = f.makeElement('th', 'Location');
-					tr.appendChild(th);
-					th = f.makeElement('th', 'Icon', 'colspan', '2');
-					th.setAttribute('width', '15%');
-					tr.appendChild(th);
-					th = f.makeElement('th', 'Text');
-					tr.appendChild(th);
-					th = f.makeElement('th', 'Max Temp');
-					tr.appendChild(th);
-					th = f.makeElement('th', 'Min Temp');
-					tr.appendChild(th);
-					th = f.makeElement('th', 'Wind Speed');
-					tr.appendChild(th);
-					th = f.makeElement('th', 'Wind Direction');
-					tr.appendChild(th);
-					f.forecast.buildForm.rows(table, period.id);
-					form.appendChild(p);
-					form.appendChild(table);
-				}
+
+				table = f.makeElement('table');
+				tr = f.makeElement('tr');
+				table.appendChild(tr);
+				th = f.makeElement('th', 'Location');
+				tr.appendChild(th);
+				th = f.makeElement('th', 'Periods');
+				tr.appendChild(th);
+				th = f.makeElement('th', 'Icon', 'colspan', '2');
+				th.setAttribute('width', '15%');
+				tr.appendChild(th);
+				th = f.makeElement('th', 'Text');
+				tr.appendChild(th);
+				th = f.makeElement('th', 'Max Temp');
+				tr.appendChild(th);
+				th = f.makeElement('th', 'Min Temp');
+				tr.appendChild(th);
+				th = f.makeElement('th', 'Wind Speed');
+				tr.appendChild(th);
+				th = f.makeElement('th', 'Wind Direction');
+				tr.appendChild(th);
+				f.forecast.buildForm.rows(table);
+				form.appendChild(table);
+
 				input = f.makeElement('input', '', 'type', 'submit');
 				input.setAttribute('value', 'Issue forecast');
 				form.appendChild(input);
@@ -153,23 +210,35 @@ var f = {
 				f.forecast.buildForm.registerEvents(formDiv);
 				return true;
 			},
-			rows: function (table, period) {
-				var i, location, tr, td, rowclas, data = f.forecast.formInfo;
+			rows: function (table) {
+				var i, j, location, period, tr, td, data = f.forecast.formInfo;
 				for (i = 0; i < data.locations.length; i++) {
 					location = data.locations[i];
-					if (i % 2 === 0) { 
+					if (i % 2 === 0) {
 						tr = f.makeElement('tr');
 					} else {
 						tr = f.makeElement('tr', '', 'class', 'row');
 					}
 					table.appendChild(tr);
 					td = f.makeElement('td', location.name);
+					td.setAttribute('rowspan', data.numPeriods);
 					tr.appendChild(td);
-					f.forecast.buildForm.columns(tr, period, location.id);
+					for (j = 0; j < data.periods.length; j++) {
+						period = data.periods[j];
+						td = f.makeElement('td', period.name);
+						tr.appendChild(td);
+						f.forecast.buildForm.columns(tr, period.id, location.id);
+						if (i % 2 === 0) {
+							tr = f.makeElement('tr');
+						} else {
+							tr = f.makeElement('tr', '', 'class', 'row');
+						}
+						table.appendChild(tr);
+					}
 				}
 			},
 			columns: function (tr, period, location) {
-				var i, td, textarea, input, div, data = f.forecast.formInfo;
+				var td, textarea, input, div;
 				// ---------------------------------------
 				td = f.makeElement('td');
 				tr.appendChild(td);
@@ -214,7 +283,7 @@ var f = {
 				td.appendChild(input);
 			},
 			icons: function (td, div, period, location) {
-				var i, select, option, image, data = f.forecast.formInfo;
+				var i, select, option, icon, image, data = f.forecast.formInfo;
 				select = f.makeElement('select', '', 'name', period + '_' + location + 'icon');
 				select.setAttribute('data-previewDiv', period + '_' + location + 'preview');
 				select.setAttribute('class', 'iconSelect');
@@ -227,21 +296,20 @@ var f = {
 				image = f.makeElement('img', '', 'src', ext_root + 'img/' + data.icons[0].image);
 				div.appendChild(image);
 			},
-			registerEvents: function (formDiv){
-				var i, icon, iconId, previewDiv, data = f.forecast.formInfo;
+			registerEvents: function (formDiv) {
+				var i, icon, iconId, image, previewDiv, data = f.forecast.formInfo;
 				$('.iconSelect').unbind().change(function () {
 					iconId = $(this).val();
 					previewDiv = $(this).attr('data-previewdiv');
-					for (i = 0; i < data.icons.length; i++){
+					for (i = 0; i < data.icons.length; i++) {
 						icon = data.icons[i];
-						if (iconId === icon.id){
+						if (iconId === icon.id) {
 							image = f.makeElement('img', '', 'src', ext_root + 'img/' + icon.image);
 							$('#' + previewDiv).html('');
 							$('#' + previewDiv).append(image);
 						}
 					}
 				});
-			
 				$('#issueForecastForm').unbind().submit(function () {
 					f.forecast.issue($(this));
 					return false;
@@ -261,7 +329,7 @@ var f = {
 						f.showMessage('fail', 'Error issuing forecast');
 					}
 				}
-			});			
+			});
 		}
 	},
 	// ##############-------[Locations]-----------##############
@@ -270,7 +338,77 @@ var f = {
 			this.registerEvents();
 			this.getLocationList();
 		},
+		showEdit: function (id) {
+			var i, location;
+			$('#locMain').fadeOut('fast');
+			$('#locEdit').fadeIn('slow');
+			for (i = 0; i < f.locations.list.length; i++) {
+				location = f.locations.list[i];
+				if (location.id === id) {
+					$('#locFormEdit input[name=locId]').val(location.id);
+					$('#locFormEdit input[name=locName]').val(location.name);
+					$('#locFormEdit input[name=locLat]').val(location.lat);
+					$('#locFormEdit input[name=locLon]').val(location.lon);
+				}
+			}
+		},
+		hideEdit: function () {
+			$('#locEdit').fadeOut('fast');
+			$('#locMain').fadeIn('slow');
+			$('#locFormEdit input[type=text], #locFormEdit input[type=hidden]').val('');
+		},
 		list: [],
+		getLocationList: function () {
+			var i, location, table, tr, th, td, div;
+			$.ajax({
+				url: ext_loc + 'processor_locationList.php',
+				success: function (data) {
+					if (data.numLocations > 0) {
+						table = f.makeElement('table');
+						tr = f.makeElement('tr');
+						table.appendChild(tr);
+						th = f.makeElement('th', 'Name');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Latitude');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'longitude');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Edit');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Delete');
+						tr.appendChild(th);
+						for (i = 0; i < data.locations.length; i++) {
+							location = data.locations[i];
+							if (i % 2 === 0) {
+								tr = f.makeElement('tr', '', 'class', 'row');
+							} else {
+								tr = f.makeElement('tr');
+							}
+							table.appendChild(tr);
+							td = f.makeElement('td', location.name);
+							tr.appendChild(td);
+							td = f.makeElement('td', location.lat);
+							tr.appendChild(td);
+							td = f.makeElement('td', location.lon);
+							tr.appendChild(td);
+							td = f.makeElement('td', '', 'data-id', location.id);
+							tr.appendChild(td);
+							div = f.makeElement('div', '', 'class', 'icon edit');
+							td.appendChild(div);
+							td = f.makeElement('td', '', 'data-id', location.id);
+							tr.appendChild(td);
+							div = f.makeElement('div', '', 'class', 'icon delete');
+							td.appendChild(div);
+						}
+						$('#locationsTable').html('').append(table);
+					} else {
+						$('#locationsTable').html('There are no locations currently, please add some!');
+					}
+					f.locations.list = data.locations;
+					f.locations.registerEvents();
+				}
+			});
+		},
 		registerEvents: function () {
 			$('#locFormAdd').unbind().submit(function () {
 				f.locations.processAdd();
@@ -345,77 +483,6 @@ var f = {
 					}
 				}
 			});
-		},
-		showEdit: function (id) {
-			var i, location;
-			$('#locMain').fadeOut('fast');
-			$('#locEdit').fadeIn('slow');
-			for (i = 0; i < f.locations.list.length; i++) {
-				location = f.locations.list[i];
-				if (location.id === id) {
-					$('#locFormEdit input[name=locId]').val(location.id);
-					$('#locFormEdit input[name=locName]').val(location.name);
-					$('#locFormEdit input[name=locLat]').val(location.lat);
-					$('#locFormEdit input[name=locLon]').val(location.lon);
-				}
-			}
-		},
-		hideEdit: function () {
-			$('#locEdit').fadeOut('fast');
-			$('#locMain').fadeIn('slow');
-			$('#locFormEdit input[type=text], #locFormEdit input[type=hidden]').val('');
-		},
-		getLocationList: function () {
-			var i, location, locationsOut, table, tr, th, td, div;
-			$.ajax({
-				url: ext_loc + 'processor_locationList.php',
-				success: function (data) {
-					if (data.numLocations > 0) {
-						table = f.makeElement('table');
-						tr = f.makeElement('tr');
-						table.appendChild(tr);
-						th = f.makeElement('th', 'Name');
-						tr.appendChild(th);
-						th = f.makeElement('th', 'Latitude');
-						tr.appendChild(th);
-						th = f.makeElement('th', 'longitude');
-						tr.appendChild(th);
-						th = f.makeElement('th', 'Edit');
-						tr.appendChild(th);
-						th = f.makeElement('th', 'Delete');
-						tr.appendChild(th);
-						for (i = 0; i < data.locations.length; i++) {
-							location = data.locations[i];
-							if (i%2===0) {
-								tr = f.makeElement('tr', '', 'class', 'row');
-							} else {
-								tr = f.makeElement('tr');
-							}
-							table.appendChild(tr);
-							td = f.makeElement('td', location.name);
-							tr.appendChild(td);
-							td = f.makeElement('td', location.lat);
-							tr.appendChild(td);
-							td = f.makeElement('td', location.lon);
-							tr.appendChild(td);
-							td = f.makeElement('td', '', 'data-id', location.id);
-							tr.appendChild(td);
-							div = f.makeElement('div', '', 'class', 'icon edit');
-							td.appendChild(div);
-							td = f.makeElement('td', '', 'data-id', location.id);
-							tr.appendChild(td);
-							div = f.makeElement('div', '', 'class', 'icon delete');
-							td.appendChild(div);
-						}
-						$('#locationsTable').html('').append(table);
-					} else {
-						$('#locationsTable').html('There are no locations currently, please add some!');
-					}
-					f.locations.list = data.locations;
-					f.locations.registerEvents();
-				}
-			});
 		}
 	}
-	
-}
+};
