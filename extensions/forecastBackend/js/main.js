@@ -57,15 +57,20 @@ var f = {
 				$('#forecastDefault').fadeOut(500);
 				$('#forecastUpdate').delay(500).fadeIn('slow');
 				f.forecast.getForecastList();
+				f.forecast.registerEvents();
 				return false;
 			});
-			$('.forecastEdit').unbind().click( function () {
+			$('#cancelEdit').unbind().click( function () {
+				f.forecast.hideEdit();
+				return false;
+			});
+			$('#forecastsTable .edit').unbind().click( function () {
 				var id = $(this).parent().attr('data-id');
-				f.forecast.getFormInfo(id);
+				f.forecast.getFormInfo(true, id);
 				//f.forecast.buildForm.init('forecastEditForm');
 				f.forecast.showEdit();
 				return false;
-			})
+			});
 			$('.forecastCancel').click(function () {
 				f.forecast.showInitalScreen();
 				return false;
@@ -74,6 +79,14 @@ var f = {
 		showInitalScreen: function () {
 			$('#forecastNew, #forecastUpdate').fadeOut(500);
 			$('#forecastDefault').delay(500).fadeIn('slow');
+		},
+		showEdit: function () {
+			$('#forecastCurrent').fadeOut('fast');
+			$('#forecastEdit').fadeIn('slow');
+		},
+		hideEdit: function () {
+			$('#forecastEdit').fadeOut('fast');
+			$('#forecastCurrent').fadeIn('slow');
 		},
 		getForecastList: function () {
 			$.ajax({
@@ -221,7 +234,7 @@ var f = {
 					}
 					table.appendChild(tr);
 					td = f.makeElement('td', location.name);
-					td.setAttribute('rowspan', data.numPeriods);
+					td.setAttribute('rowspan', data.periods.length);
 					tr.appendChild(td);
 					for (j = 0; j < data.periods.length; j++) {
 						period = data.periods[j];
@@ -361,9 +374,9 @@ var f = {
 		getLocationList: function () {
 			var i, location, table, tr, th, td, div;
 			$.ajax({
-				url: ext_loc + 'processor_locationList.php',
+				url: ext_loc + 'controller_location.php?action=list',
 				success: function (data) {
-					if (data.numLocations > 0) {
+					if (data.locations.length > 0) {
 						table = f.makeElement('table');
 						tr = f.makeElement('tr');
 						table.appendChild(tr);
@@ -418,12 +431,12 @@ var f = {
 				f.locations.processEdit();
 				return false;
 			});
-			$('.edit').unbind().click(function () {
+			$('#locationsTable .edit').unbind().click(function () {
 				var id = $(this).parent().attr('data-id');
 				f.locations.showEdit(id);
 				return false;
 			});
-			$('.delete').unbind().click(function () {
+			$('#locationsTable .delete').unbind().click(function () {
 				var id = $(this).parent().attr('data-id'),
 					name = $(this).parent().prev().prev().prev().prev().html(); //this feels messy...
 				if (confirm('Are you sure you want to delete \'' + name + '\'?')) {
@@ -440,9 +453,10 @@ var f = {
 		processAdd: function () {
 			var form = $('#locFormAdd');
 			$.ajax({
-				url: ext_loc + 'processor_locationAdd.php',
-				data: form.serialize(),
+				url: ext_loc + 'controller_location.php',
+				data: form.serialize() + '&action=add',
 				success: function (data) {
+				console.log(data);
 					if (data.result) {
 						f.showMessage('pass', 'Location added!');
 						f.locations.getLocationList();
@@ -456,8 +470,8 @@ var f = {
 		processEdit: function () {
 			var form = $('#locFormEdit');
 			$.ajax({
-				url: ext_loc + 'processor_locationEdit.php',
-				data: form.serialize(),
+				url: ext_loc + 'controller_location.php',
+				data: form.serialize() + '&action=update',
 				success: function (data) {
 					if (data.result) {
 						f.showMessage('pass', 'Location updated!');
@@ -472,8 +486,8 @@ var f = {
 		},
 		processDelete: function (id) {
 			$.ajax({
-				url: ext_loc + 'processor_locationDelete.php',
-				data: 'id=' + id,
+				url: ext_loc + 'controller_location.php',
+				data: 'locId=' + id + '&action=delete',
 				success: function (data) {
 					if (data.result) {
 						f.showMessage('pass', 'Location deleted!');
