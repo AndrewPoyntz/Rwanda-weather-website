@@ -1,7 +1,5 @@
 <?php
 header('Content-type: application/json');
-include 'conf.php';
-include $BACK_PATH."/init.php";
 require 'class_db.php';
 if (isset($_GET['id'])){
 	$edit = true;
@@ -40,7 +38,6 @@ while ($location = $locations->fetch()) {
 $result["locations"] = $locationList;
 // get periods
 $periods = $db->query('SELECT * FROM forecast_periods');
-
 $periodList = array();
 if ($periods === false){
     $echo = $db->errorInfo();

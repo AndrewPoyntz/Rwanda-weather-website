@@ -1,28 +1,16 @@
 <?php
 header('Content-type: application/json');
 require_once("class_lib.php");
-$id = $_GET['locId'];
-if (isset($id)){
-	$location = new location($id);
-} else {
-	$location = new location();
-}
 $action = $_GET["action"];
+$forecast = new forecast();
 $out = array();
 switch ($action) {
 	case "list":
-		// TODO move this into the class, & make this a one liner
-		$locationList = array();
-		$locations = $db->query("SELECT * FROM forecast_locations WHERE deleted = 0");
-		while ($location = $locations->fetch()) {
-			$locationList[] = array(
-				'id' => $location['id'],
-				'name' => $location['name'],
-				'lat' => $location['lat'],
-				'lon' => $location['lon']
-			);
-		}
-		$out["locations"] = $locationList;
+		$out["forecasts"] = $forecast->list_all();
+	break;
+	case "form":
+		$forecast_id = (isset($_GET["forecast_id"]) ? $_GET["forecast_id"] : "");
+		$out["locations"] = $forecast->details($forecast_id);
 	break;
 	case "add":
 		$name = $_GET['locName'];
@@ -48,7 +36,7 @@ switch ($action) {
 		}
 	break;
 	case "delete":
-		$out["result"] = ($location->delete($id) ? true : false);		
+		$out["result"] = ($location->delete($_GET['id']) ? true : false);		
 	break;
 	default:
 		$out["result"] = false;

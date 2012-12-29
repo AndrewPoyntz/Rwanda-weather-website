@@ -65,30 +65,56 @@ class location{
 	}
 }
 class forecast {
-	function getDetails ($forecast_id){
+	function __construct(){
+		
+	}
+	function list_all (){
+		global $db;
+		$forecasts = $db->query("SELECT * FROM forecasts");
+		$forecastList = array();
+		while ($forecast = $forecasts->fetch()) {
+			$forecastList[] = array(
+				'id' => $forecast['id'],
+				'rawIssueTime' => $forecast['issue_time'],
+				'date' => date('D jS F Y', strtotime($forecast['issue_time'])),
+				'headline' => $forecast['headline'],
+				'severeWeather' => $forecast['severe_weather']
+			);
+		}
+		return $forecastList;
+	}
+	function details ($forecast_id){
+		global $db;
 		$i = 0;
 		$locations_array = array();
-		$locations = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, "SELECT distinct name, forecast_locations.id FROM forecast_locations, forecast_detail WHERE forecast_id = " . $forecast_id . " AND forecast_detail.location_id = forecast_locations.id");
-		while ($location = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($locations)){
-			$location_id = $location['id'];
+		$locations			= $db->prepare("SELECT distinct name, forecast_locations.id FROM forecast_locations, forecast_detail WHERE forecast_detail.location_id = forecast_locations.id");
+		$periods 			= $db->prepare("SELECT distinct name, forecast_periods.id FROM forecast_periods, forecast_detail WHERE forecast_detail.period_id = forecast_periods.id");
+		$forecast_details	= $db->prepare("SELECT * FROM forecast_detail WHERE forecast_id = :forecastID AND period_id = :periodID AND location_id = :locationID LIMIT 1");
+		$icons				= $db->prepare("SELECT * FROM forecast_icons WHERE id = :iconID LIMIT 1");
+		$forecast_details->bindParam(':forecastID', $forecast_id);
+		$locations->execute();
+		while ($location = $locations->fetch()){
+			$periods->execute();
+			$forecast_details->bindParam(':locationID', $location['id']);
 			$location_name = $location['name'];
 			//echo "location: ". $location_name ." <br>";
 			$period_array = array();
-			$periods = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, "SELECT distinct name, forecast_periods.id FROM forecast_periods, forecast_detail WHERE forecast_id = " . $forecast_id . " AND forecast_detail.period_id = forecast_periods.id");
-			while ($period = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($periods)){
-				$period_id = $period['id'];
+			while ($period = $periods->fetch()){
+				$forecast_details->bindValue(':periodID', $period['id']);
 				$period_name = $period['name'];
 				//echo "period: ". $period_name ." <br>";
 				$detail_array = array();
-				$forecast_details = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, "SELECT * FROM forecast_detail WHERE forecast_id=" . $forecast_id . " AND period_id=".$period_id." AND location_id=".$location_id."");
-				while ($forecast_detail = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forecast_details)) {
+				$forecast_details->execute();
+				//echo $forecast_details->debugDumpParams();
+				while ($forecast_detail = $forecast_details->fetch()) {
 					$text           = $forecast_detail['text'];
 					$min_temp       = $forecast_detail['min_temp'];
 					$max_temp       = $forecast_detail['max_temp'];
 					$wind_speed     = $forecast_detail['wind_speed'];
 					$wind_direction = $forecast_detail['wind_direction'];
-					$icon_Q         = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'forecast_icons', "id='" . $forecast_detail['icon_id'] . "'");
-					while ($icon = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($icon_Q)){
+					$icons->bindParam(':iconID', $forecast_detail['icon_id']);
+					$icons->execute();
+					while ($icon = $icons->fetch()){
 						$icon_image = $icon['image'];
 						$icon_name = $icon['name'];
 					}

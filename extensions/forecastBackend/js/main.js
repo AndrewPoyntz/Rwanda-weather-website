@@ -90,7 +90,8 @@ var f = {
 		},
 		getForecastList: function () {
 			$.ajax({
-				url: ext_loc + 'processor_forecastList.php',
+				url: ext_loc + 'controller_forecast.php',
+				data: 'action=list',
 				async: false,
 				success: function (data) {
 					if (data.forecasts.length > 0) {
