@@ -25,7 +25,7 @@ $ext_path = "/typo3conf/ext/".$_EXTKEY;
 			</div>
 			<div id="forecastNew" style="display:none;">
 				<h3>Issue a new forecast</h3>
-				<div id="forecastNewForm"></div>
+				<div id="forecastNewFormContainer"></div>
 				<button class="forecastCancel">Cancel</button>
 			</div>
 			<div id="forecastUpdate" style="display:none;">
@@ -36,7 +36,7 @@ $ext_path = "/typo3conf/ext/".$_EXTKEY;
 				</div>
 				<div id="forecastEdit" style="display:none;">
 					<h3>Edit forecast</h3>
-				<div id="forecastEditForm"></div>
+				<div id="forecastEditFormContainer"></div>
 					<button id="cancelEdit">Cancel</button>
 				</div>
 			</div>

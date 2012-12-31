@@ -1,3 +1,4 @@
+/*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:true, undef:true, unused:true, curly:true, browser:true, jquery:true, indent:4, maxerr:50 */
 //stuff to run on pageload
 $(document).ready(function () {
 	f.defaultClickEvents(); // register the global click events
@@ -50,7 +51,7 @@ var f = {
 				$('#forecastDefault').fadeOut(500);
 				$('#forecastNew').delay(500).fadeIn('slow');
 				f.forecast.getFormInfo();
-				f.forecast.buildForm.init('forecastNewForm');
+				f.forecast.buildForm.init('forecastNewFormContainer');
 				return false;
 			});
 			$('#forecastBtnUpdate').unbind().click(function () {
@@ -67,7 +68,7 @@ var f = {
 			$('#forecastsTable .edit').unbind().click( function () {
 				var id = $(this).parent().attr('data-id');
 				f.forecast.getFormInfo(true, id);
-				//f.forecast.buildForm.init('forecastEditForm');
+				f.forecast.buildForm.init('forecastEditFormContainer');
 				f.forecast.showEdit();
 				return false;
 			});
@@ -94,6 +95,7 @@ var f = {
 				data: 'action=list',
 				async: false,
 				success: function (data) {
+					var table, tr, th, td, div, i, forecast;
 					if (data.forecasts.length > 0) {
 						table = f.makeElement('table');
 						tr = f.makeElement('tr');
@@ -105,8 +107,6 @@ var f = {
 						//th = f.makeElement('th', 'Severe Weather');
 						tr.appendChild(th);
 						th = f.makeElement('th', 'Edit');
-						tr.appendChild(th);
-						th = f.makeElement('th', 'Delete');
 						tr.appendChild(th);
 						for (i = 0; i < data.forecasts.length; i++) {
 							forecast = data.forecasts[i];
@@ -126,10 +126,6 @@ var f = {
 							tr.appendChild(td);
 							div = f.makeElement('div', '', 'class', 'icon edit');
 							td.appendChild(div);
-							td = f.makeElement('td', '', 'data-id', forecast.id);
-							tr.appendChild(td);
-							div = f.makeElement('div', '', 'class', 'icon delete');
-							td.appendChild(div);
 						}
 						$('#forecastsTable').html('').append(table);
 					} else {
@@ -141,9 +137,10 @@ var f = {
 		},
 		formInfo: [],
 		getFormInfo: function (edit, id) {
-			var data = edit ? 'id=' + id : '';
+			var data = 'action=form';
+			data += edit ? '&id=' + id : '';
 			$.ajax({
-				url: ext_loc + 'processor_forecastForm.php',
+				url: ext_loc + 'controller_forecast.php',
 				data: data,
 				async: false,
 				success: function (data) {
@@ -155,9 +152,9 @@ var f = {
 		},
 		buildForm: {
 			init: function (formDiv) {
-				var form, input, table, tr, td, th;
+				var form, input, table, tr, td, th, data = f.forecast.formInfo.info;
 				$('#' + formDiv).html('');
-				form = f.makeElement('form', '', 'id', formDiv);
+				form = f.makeElement('form', '', 'id', formDiv.substring(0, formDiv.length - 9));
 				table = f.makeElement('table');
 				//--------------------------------------
 				tr = f.makeElement('tr');
@@ -168,7 +165,16 @@ var f = {
 				td = f.makeElement('td');
 				input = f.makeElement('input', '', 'name', 'issue_time');
 				input.setAttribute('type', 'text');
+				if (data.issueTime !== null){
+					input.setAttribute('value', data.issueTime);
+				}
 				td.appendChild(input);
+				if (data.id !== null){
+					input = f.makeElement('input', '', 'name', 'id');
+					input.setAttribute('type', 'hidden');
+					input.setAttribute('value', data.id);
+					td.appendChild(input);
+				}
 				tr.appendChild(td);
 				//-------------------------------------
 				tr = f.makeElement('tr');
@@ -179,6 +185,9 @@ var f = {
 				td = f.makeElement('td');
 				input = f.makeElement('input', '', 'name', 'headline');
 				input.setAttribute('type', 'text');
+				if (data.headline !== null){
+					input.setAttribute('value', data.headline);
+				}
 				td.appendChild(input);
 				tr.appendChild(td);
 				//-------------------------------------
@@ -190,6 +199,9 @@ var f = {
 				td = f.makeElement('td');
 				input = f.makeElement('input', '', 'name', 'severe_weather');
 				input.setAttribute('type', 'text');
+				if (data.severeWeather !== null){
+					input.setAttribute('value', data.severeWeather);
+				}
 				td.appendChild(input);
 				tr.appendChild(td);
 				form.appendChild(table);
@@ -235,13 +247,13 @@ var f = {
 					}
 					table.appendChild(tr);
 					td = f.makeElement('td', location.name);
-					td.setAttribute('rowspan', data.periods.length);
+					td.setAttribute('rowspan', location.periods.length);
 					tr.appendChild(td);
-					for (j = 0; j < data.periods.length; j++) {
-						period = data.periods[j];
+					for (j = 0; j < location.periods.length; j++) {
+						period = location.periods[j];
 						td = f.makeElement('td', period.name);
 						tr.appendChild(td);
-						f.forecast.buildForm.columns(tr, period.id, location.id);
+						f.forecast.buildForm.columns(tr, period.id, location.id, period.detail[0]);
 						if (i % 2 === 0) {
 							tr = f.makeElement('tr');
 						} else {
@@ -251,8 +263,9 @@ var f = {
 					}
 				}
 			},
-			columns: function (tr, period, location) {
+			columns: function (tr, period, location, detail) {
 				var td, textarea, input, div;
+				detail = (typeof detail !== 'undefined') ? detail : "";
 				// ---------------------------------------
 				td = f.makeElement('td');
 				tr.appendChild(td);
@@ -260,12 +273,15 @@ var f = {
 				td.appendChild(div);
 				// ---------------------------------------
 				td = f.makeElement('td');
-				f.forecast.buildForm.icons(td, div, period, location);
+				f.forecast.buildForm.icons(td, div, period, location, detail);
 				tr.appendChild(td);
 				// ---------------------------------------
 				td = f.makeElement('td');
 				tr.appendChild(td);
 				textarea = f.makeElement('textarea', '', 'name', period + '_' + location + 'text');
+				if (typeof (detail.text) !== 'undefined') {
+					textarea.innerHTML = detail.text;
+				}
 				td.appendChild(textarea);
 				// ---------------------------------------
 				td = f.makeElement('td');
@@ -273,6 +289,9 @@ var f = {
 				input = f.makeElement('input', '', 'name', period + '_' + location + 'maxTemp');
 				input.setAttribute('type', 'text');
 				input.setAttribute('size', '3');
+				if (typeof (detail.maxTemp) !== 'undefined') {
+					input.setAttribute('value', detail.maxTemp);
+				}
 				td.appendChild(input);
 				// ---------------------------------------
 				td = f.makeElement('td');
@@ -280,6 +299,9 @@ var f = {
 				input = f.makeElement('input', '', 'name', period + '_' + location + 'minTemp');
 				input.setAttribute('type', 'text');
 				input.setAttribute('size', '3');
+				if (typeof (detail.minTemp) !== 'undefined') {
+					input.setAttribute('value', detail.minTemp);
+				}
 				td.appendChild(input);
 				// ---------------------------------------
 				td = f.makeElement('td');
@@ -287,6 +309,9 @@ var f = {
 				input = f.makeElement('input', '', 'name', period + '_' + location + 'windSpeed');
 				input.setAttribute('type', 'text');
 				input.setAttribute('size', '3');
+				if (typeof (detail.windSpeed) !== 'undefined') {
+					input.setAttribute('value', detail.windSpeed);
+				}
 				td.appendChild(input);
 				// ---------------------------------------
 				td = f.makeElement('td');
@@ -294,9 +319,12 @@ var f = {
 				input = f.makeElement('input', '', 'name', period + '_' + location + 'windDir');
 				input.setAttribute('type', 'text');
 				input.setAttribute('size', '3');
+				if (typeof (detail.windDirection) !== 'undefined') {
+					input.setAttribute('value', detail.windDirection);
+				}
 				td.appendChild(input);
 			},
-			icons: function (td, div, period, location) {
+			icons: function (td, div, period, location, detail) {
 				var i, select, option, icon, image, data = f.forecast.formInfo;
 				select = f.makeElement('select', '', 'name', period + '_' + location + 'icon');
 				select.setAttribute('data-previewDiv', period + '_' + location + 'preview');
@@ -305,14 +333,21 @@ var f = {
 				for (i = 0; i < data.icons.length; i++) {
 					icon = data.icons[i];
 					option = f.makeElement('option', icon.name, 'value', icon.id);
+					if (detail.iconId === icon.id){
+						option.setAttribute('selected', 'selected');
+					}
 					select.appendChild(option);
 				}
-				image = f.makeElement('img', '', 'src', ext_root + 'img/' + data.icons[0].image);
+				if (typeof (detail.icon) !== 'undefined') {
+					image = f.makeElement('img', '', 'src', ext_root + 'img/' + detail.icon);
+				} else {
+					image = f.makeElement('img', '', 'src', ext_root + 'img/' + data.icons[0].image);
+				}
 				div.appendChild(image);
 			},
 			registerEvents: function (formDiv) {
 				var i, icon, iconId, image, previewDiv, data = f.forecast.formInfo;
-				$('.iconSelect').unbind().change(function () {
+				$('#' + formDiv + ' .iconSelect').unbind().change(function () {
 					iconId = $(this).val();
 					previewDiv = $(this).attr('data-previewdiv');
 					for (i = 0; i < data.icons.length; i++) {
@@ -324,7 +359,8 @@ var f = {
 						}
 					}
 				});
-				$('#issueForecastForm').unbind().submit(function () {
+				$('#' + formDiv.substring(0, formDiv.length - 9)).unbind().submit(function () {
+					console.log('form submitted');
 					f.forecast.issue($(this));
 					return false;
 				});
@@ -333,7 +369,7 @@ var f = {
 		issue: function (form) {
 			$.ajax({
 				type: 'POST',
-				url: ext_loc + 'processor_forecastIssue.php',
+				url: ext_loc + 'controller_forecast.php?action=issue',
 				data: form.serialize(),
 				success: function (data) {
 					if (data.result) {
