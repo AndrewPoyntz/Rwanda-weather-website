@@ -15,15 +15,22 @@ var f = {
 			$('.tab').removeClass('active'); // if we add another tab, it'll mae sense to move this line & the one below, outside 
 			$(this).addClass('active'); //      as it's the same actions for both, (it's the same number of lines with only 2 tabs)
 			$('#forecast').show();
-			$('#locationsManagement').hide();
+			$('#locationsManagement, #warningsManagement').hide();
 			f.forecast.init();
 		});
 		$('#locationTab').click(function () {
 			$('.tab').removeClass('active');
 			$(this).addClass('active');
 			$('#locationsManagement').show();
-			$('#forecast').hide();
+			$('#forecast, #warningsManagement').hide();
 			f.locations.init();
+		});
+		$('#warningsTab').click(function () {
+			$('.tab').removeClass('active');
+			$(this).addClass('active');
+			$('#warningsManagement').show();
+			$('#forecast, #locationsManagement').hide();
+			f.warnings.init();
 		});
 	},
 	makeElement: function (element, content, attr, attrValue) {
@@ -165,8 +172,10 @@ var f = {
 				td = f.makeElement('td');
 				input = f.makeElement('input', '', 'name', 'issue_time');
 				input.setAttribute('type', 'text');
+				input.setAttribute('class', 'dateInput');
 				if (data.issueTime !== null){
 					input.setAttribute('value', data.issueTime);
+					console.log(data.issueTime);
 				}
 				td.appendChild(input);
 				if (data.id !== null){
@@ -359,6 +368,7 @@ var f = {
 						}
 					}
 				});
+				$('#' + formDiv + ' .dateInput').datepicker({dateFormat:'yy-mm-dd'});
 				$('#' + formDiv.substring(0, formDiv.length - 9)).unbind().submit(function () {
 					console.log('form submitted');
 					f.forecast.issue($(this));
@@ -531,6 +541,174 @@ var f = {
 						f.locations.getLocationList();
 					} else {
 						f.showMessage('fail', 'Error deleting location');
+					}
+				}
+			});
+		}
+	},
+	// ##############-------[Warnings]-----------##############
+	warnings: { // container for all functions relating to the warnings tab - f.warnings.[function]()
+		init: function () {
+			this.registerEvents();
+			this.getWarningList();
+		},
+		showEdit: function (id) {
+			var i, warning;
+			$('#warnMain').fadeOut('fast');
+			$('#warnEdit').fadeIn('slow');
+			for (i = 0; i < f.warnings.list.length; i++) {
+				warning = f.warnings.list[i];
+				if (warning.id === id) {
+					$('#warnFormEdit input[name=warnId]').val(warning.id);
+					$('#warnFormEdit input[name=warnTitle]').val(warning.title);
+					$('#warnFormEdit input[name=warnDescription]').val(warning.description);
+					$('#warnFormEdit input[name=warnValidFrom]').val(warning.validFrom);
+					$('#warnFormEdit input[name=warnValidTo]').val(warning.validTo);
+					$('#warnFormEdit input[name=warnType]').val(warning.type);
+				}
+			}
+		},
+		hideEdit: function () {
+			$('#warnEdit').fadeOut('fast');
+			$('#warnMain').fadeIn('slow');
+			$('#warnFormEdit input[type=text], #warnFormEdit input[type=hidden]').val('');
+		},
+		list: [],
+		getWarningList: function () {
+			var i, warning, table, tr, th, td, div;
+			$.ajax({
+				url: ext_loc + 'controller_warning.php?action=list',
+				success: function (data) {
+					if (data.warnings.length > 0) {
+						table = f.makeElement('table');
+						tr = f.makeElement('tr');
+						table.appendChild(tr);
+						th = f.makeElement('th', 'Headline');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Content');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Valid From');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Valid To');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Type');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Edit');
+						tr.appendChild(th);
+						th = f.makeElement('th', 'Delete');
+						tr.appendChild(th);
+						for (i = 0; i < data.warnings.length; i++) {
+							warning = data.warnings[i];
+							if (i % 2 === 0) {
+								tr = f.makeElement('tr', '', 'class', 'row');
+							} else {
+								tr = f.makeElement('tr');
+							}
+							table.appendChild(tr);
+							td = f.makeElement('td', warning.title);
+							tr.appendChild(td);
+							td = f.makeElement('td', warning.description);
+							tr.appendChild(td);
+							td = f.makeElement('td', warning.validFrom);
+							tr.appendChild(td);
+							td = f.makeElement('td', warning.validTo);
+							tr.appendChild(td);
+							td = f.makeElement('td', warning.type);
+							tr.appendChild(td);
+							td = f.makeElement('td', '', 'data-id', warning.id);
+							tr.appendChild(td);
+							div = f.makeElement('div', '', 'class', 'icon edit');
+							td.appendChild(div);
+							td = f.makeElement('td', '', 'data-id', warning.id);
+							tr.appendChild(td);
+							div = f.makeElement('div', '', 'class', 'icon delete');
+							td.appendChild(div);
+						}
+						$('#warningsTable').html('').append(table);
+					} else {
+						$('#warningsTable').html('There are no warnings currently.');
+					}
+					f.warnings.list = data.warnings;
+					f.warnings.registerEvents();
+				}
+			});
+		},
+		registerEvents: function () {
+			$('#warnFormAdd').unbind().submit(function () {
+				f.warnings.processAdd();
+				return false; // return false to stop the page reloading
+			});
+			$('#warnFormEdit').unbind().submit(function () {
+				f.warnings.processEdit();
+				return false;
+			});
+			$('#warnFormAdd .dateTimeInput, #warnFormEdit .dateTimeInput').datetimepicker({
+				timeFormat: 'HH:mm:ss',
+				dateFormat: 'yy-mm-dd'
+			});
+			$('#warningsTable .edit').unbind().click(function () {
+				var id = $(this).parent().attr('data-id');
+				f.warnings.showEdit(id);
+				return false;
+			});
+			$('#warningsTable .delete').unbind().click(function () {
+				var id = $(this).parent().attr('data-id'),
+					name = $(this).parent().prev().prev().prev().prev().html(); //this feels messy...
+				if (confirm('Are you sure you want to delete \'' + name + '\'?')) {
+					f.warnings.processDelete(id);
+					return false;
+				}
+				return false;
+			});
+			$('#cancelEdit').unbind().click(function () {
+				f.warnings.hideEdit();
+				return false;
+			});
+		},
+		processAdd: function () {
+			var form = $('#warnFormAdd');
+			$.ajax({
+				url: ext_loc + 'controller_warning.php',
+				data: form.serialize() + '&action=add',
+				success: function (data) {
+				console.log(data);
+					if (data.result) {
+						f.showMessage('pass', 'Warning added!');
+						f.warnings.getWarningList();
+					} else {
+						f.showMessage('fail', 'Error adding warning');
+					}
+					$('#warnFormAdd input[type=text]').val('');
+				}
+			});
+		},
+		processEdit: function () {
+			var form = $('#warnFormEdit');
+			$.ajax({
+				url: ext_loc + 'controller_warning.php',
+				data: form.serialize() + '&action=update',
+				success: function (data) {
+					if (data.result) {
+						f.showMessage('pass', 'Warning updated!');
+						f.warnings.getWarningList();
+						f.warnings.hideEdit();
+						$('#warnFormEdit input[type=text]').val('');
+					} else {
+						f.showMessage('fail', 'Error updating warning');
+					}
+				}
+			});
+		},
+		processDelete: function (id) {
+			$.ajax({
+				url: ext_loc + 'controller_warning.php',
+				data: 'locId=' + id + '&action=delete',
+				success: function (data) {
+					if (data.result) {
+						f.showMessage('pass', 'Warning deleted!');
+						f.warnings.getWarningList();
+					} else {
+						f.showMessage('fail', 'Error deleting warning');
 					}
 				}
 			});

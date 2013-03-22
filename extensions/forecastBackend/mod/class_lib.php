@@ -1,5 +1,5 @@
 <?php
-require('./class_db.php');
+require('class_db.php');
 
 class location{
 	var $ID;
@@ -10,9 +10,8 @@ class location{
 		global $db;
 		if (!empty($location_data)) {
 			if (!is_array($location_data)) {
-				$locations = $db->prepare("SELECT * FROM forecast_locations WHERE id = :id LIMIT 1");
-				$loactions->bindParam(':id', $location_data);
-				$locations->execute();
+				$locations = $db->prepare("SELECT * FROM forecast_locations WHERE id = ':id' LIMIT 1");
+				$locations->execute(array(':id' => $location_data));
 				$location_data = $locations->fetch(); 
 			}
 			$this->ID = stripslashes($location_data['id']);
@@ -96,7 +95,11 @@ class forecast {
 		$query->execute();
 		$forecast = $query->fetch();
 		$info["id"] = $forecast['id'];
-		$info["issueTime"] = date('Y-m-d', strtotime($forecast['issue_time']));
+		if (!empty($forecast['issue_time'])) {
+			$info["issueTime"] = date('Y-m-d', strtotime($forecast['issue_time']));
+		} else {
+			$info["issueTime"] = date('Y-m-d');
+		}
 		$info["headline"] = $forecast['headline'];
 		$info["severeWeather"] = $forecast['severe_weather'];
 		return $info;
@@ -252,4 +255,78 @@ class forecast {
 		return true;
 	}
 }
+class warning{
+	var $ID;
+	var $title;
+	var $description;
+	var $validFrom;
+	var $validTo;
+	var $type;
+	function __construct($warning_data) {
+		global $db;
+		if (!empty($warning_data)) {
+			if (!is_array($warning_data)) {
+				$warnings = $db->prepare("SELECT * FROM warnings WHERE id = :id LIMIT 1");
+				$warnings->execute(array(':id' => $warning_data));
+				$warning_data = $warnings->fetch(); 
+			}
+			$this->ID = stripslashes($warning_data['id']);
+			$this->title = stripslashes($warning_data['title']);
+			$this->description = stripslashes($warning_data['description']);
+			$this->validFrom = stripslashes($warning_data['valid_from']);
+			$this->validTo = stripslashes($warning_data['valid_to']);
+			$this->type = stripslashes($warning_data['type']);
+		}
+	}
+	
+	function add ($title, $description, $validfrom, $validto, $type) {
+		global $db;
+		$query = $db->prepare("INSERT INTO warnings VALUES ('', :title, :description, :validfrom, :validto, :type)");
+		$query->bindParam(':title', $title);
+		$query->bindParam(':description', $description);
+		$query->bindParam(':validfrom', $validfrom);
+		$query->bindParam(':validto', $validto);
+		$query->bindParam(':type', $type);
+		$query->execute();
+		if ($query) {
+			$this->ID = $db->lastInsertId();
+			$this->title = $title;
+			$this->description = $description;
+			$this->validfrom = $validfrom;
+			$this->validto = $validto;
+			$this->type = $type;
+			return true;
+		} else {
+			return false;
+		};
+	}
+	function update ($id, $title, $description, $validfrom, $validto, $type) {
+		global $db;
+		$query = $db->prepare("UPDATE warnings SET title = :title, description = :description, valid_from = :validfrom, valid_to = :validto, type = :type WHERE id = :id");
+		$query->bindParam(':id', $id);
+		$query->bindParam(':title', $title);
+		$query->bindParam(':description', $description);
+		$query->bindParam(':validfrom', $validfrom);
+		$query->bindParam(':validto', $validto);
+		$query->bindParam(':type', $type);
+		$query->execute();
+		if ($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	function delete ($id) {
+		global $db;
+		$query = $db->prepare("DELETE FROM warnings WHERE id = :id");
+		$query->bindParam(':id', $id);
+		$query->execute();
+		if ($query) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+}
+
 ?>

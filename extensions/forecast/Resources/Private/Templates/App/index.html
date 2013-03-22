@@ -1,4 +1,9 @@
-<div id="tooltip"></div>
+<f:if condition="{warning}">
+<div id="warning">
+	<div id="warningTitle" class="{warningType}">{warningTitle}</div>
+	<div id="warningText">{warningContent} <span class="validTime">Valid: {warningTime}</span></div>
+</div>
+</f:if>
 <div id="headlines">
 	<h1>
 		Today's weather <br> 
@@ -38,6 +43,7 @@
 		</f:for>
 	</table>
 </div>
+<div id="mapData" style="display:none">{mapData}</div>
 <div id="map">
 	<div id="customZoom">
 		<a href="#customZoomIn" id="customZoomIn">+</a>

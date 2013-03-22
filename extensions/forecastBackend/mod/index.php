@@ -3,8 +3,11 @@ include "conf.php";
 include $BACK_PATH."/init.php";
 $ext_path = "/typo3conf/ext/".$_EXTKEY;
 ?>
-<script src="<?php echo $ext_path; ?>/js/jquery-1.8.3.min.js"></script>
+<script src="<?php echo $ext_path; ?>/js/jquery-1.9.1.js"></script>
+<script src="<?php echo $ext_path; ?>/js/jquery-ui-1.10.2.custom.min.js"></script>
+<script src="<?php echo $ext_path; ?>/js/jquery-ui-timepicker-addon.js"></script>
 <script src="<?php echo $ext_path; ?>/js/main.js"></script>
+<link rel="stylesheet" href="<?php echo $ext_path; ?>/css/jquery-ui-1.10.2.min.css" />
 <link rel="stylesheet" href="<?php echo $ext_path; ?>/css/main.css" />
 <link rel="stylesheet" href="<?php echo $ext_path; ?>/css/locations.css" />
 <div id="message"><!-- --></div>
@@ -14,6 +17,7 @@ $ext_path = "/typo3conf/ext/".$_EXTKEY;
 		<ul>
 			<li><a href="#" id="forecastTab" class="tab active">Forecast</a></li>
 			<li><a href="#" id="locationTab" class="tab">Manage Locations</a></li>
+			<li><a href="#" id="warningsTab" class="tab">Manage Warnings</a></li>
 		</ul>
 	</div>
 	<div id="contentArea">
@@ -86,6 +90,73 @@ $ext_path = "/typo3conf/ext/".$_EXTKEY;
 					</tr>
 					<tr>
 						<td><input type="hidden" name="locId" /></td>
+						<td><input type="submit" value="Update" /><button id="cancelEdit">Cancel</button></td>
+					</tr>
+				</table>
+				</form>
+			</div>
+		</div>
+		<div id="warningsManagement" style="display:none;">
+			<h2>Warnings Management</h2>
+			<div id="warnMain">
+				<h3>Add a new warning</h3>
+				<form action="" id="warnFormAdd">
+				<table>
+					<tr>
+						<td>Warning headline:</td>
+						<td><input type="text" name="warnTitle" /></td>
+					</tr>
+					<tr>
+						<td>Content</td>
+						<td><input type="text" name="warnDescription" /></td>
+					</tr>
+					<tr>
+						<td>Valid from:</td>
+						<td><input type="text" name="warnValidFrom" class="dateTimeInput" /></td>
+					</tr>
+					<tr>
+						<td>Valid to:</td>
+						<td><input type="text" name="warnValidTo" class="dateTimeInput" /></td>
+					</tr>
+					<tr>
+						<td>Type:</td>
+						<td><input type="text" name="warnType" /></td>
+					</tr>
+					<tr>
+						<td>&nbsp;</td>
+						<td><input type="submit" value="Add" /></td>
+					</tr>
+				</table>
+				</form>
+				<h3>Current Warnings</h3>
+				<div id="warningsTable">loading...</div>
+			</div>
+			<div id="warnEdit" style="display:none;">
+				<h3>Edit Warnings</h3>
+				<form action="" id="warnFormEdit">
+				<table>
+					<tr>
+						<td>Warning headline:</td>
+						<td><input type="text" name="warnTitle" /></td>
+					</tr>
+					<tr>
+						<td>Content</td>
+						<td><input type="text" name="warnDescription" /></td>
+					</tr>
+					<tr>
+						<td>Valid from:</td>
+						<td><input type="text" name="warnValidFrom" class="dateTimeInput"  /></td>
+					</tr>
+					<tr>
+						<td>Valid to:</td>
+						<td><input type="text" name="warnValidTo" class="dateTimeInput"  /></td>
+					</tr>
+					<tr>
+						<td>Type:</td>
+						<td><input type="text" name="warnType" /></td>
+					</tr>
+					<tr>
+						<td><input type="hidden" name="warnId" /></td>
 						<td><input type="submit" value="Update" /><button id="cancelEdit">Cancel</button></td>
 					</tr>
 				</table>

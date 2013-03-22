@@ -61,19 +61,22 @@ var page = {
 	forecastLayer: new OpenLayers.Layer.Vector("Polygon Layer"),
 	data: [],
 	get_data: function () {
-		$.ajax({
+		/*$.ajax({
 			url: "fileadmin/data/latestForecast.json",
 			dataType: "json",
 			success: function (data) {
 				page.data = data;
 				page.loadMarkers('1');
 			}
-		});
+		});*/
+		page.data = JSON.parse($('#mapData').html());
+		if (page.data){
+			page.loadMarkers('1');
+		}
 	},
 	loadMarkers: function (period_id) {
 		page.forecastLayer.removeAllFeatures();
 		var locations = [], a, b, c, data = page.data;
-		console.log(data);
 		for (a = 0; a < data.locations.length; a++){
 			//console.log(data.locations[a]);
 			var location = data.locations[a];

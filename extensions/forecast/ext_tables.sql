@@ -3,14 +3,14 @@
 --
 
 DROP TABLE IF EXISTS `forecasts`;
-CREATE TABLE  `forecasts` (
+CREATE TABLE `forecasts` (
   `id` int(11) NOT NULL auto_increment,
-  `issue_time` datetime default '',
-  `published` datetime default '',
-  `headline` text,
-  `severe_weather` text,
+  `issue_time` datetime NOT NULL,
+  `published` datetime NOT NULL,
+  `headline` text NOT NULL,
+  `severe_weather` text NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -19,17 +19,17 @@ CREATE TABLE  `forecasts` (
 --
 
 DROP TABLE IF EXISTS `forecast_detail`;
-CREATE TABLE  `forecast_detail` (
-  `id` int(11) unsigned NOT NULL auto_increment,
+CREATE TABLE `forecast_detail` (
+  `id` int(15) unsigned NOT NULL auto_increment,
   `text` text,
-  `min_temp` int(3) default '',
-  `max_temp` int(3) default '',
-  `wind_speed` int(3) default '',
-  `wind_direction` varchar(3) default '',
-  `icon_id` int(11) default '',
-  `forecast_id` int(11) default '',
-  `location_id` int(11) default '',
-  `period_id` int(2) default '',
+  `min_temp` int(3) default NULL,
+  `max_temp` int(3) default NULL,
+  `wind_speed` int(3) default NULL,
+  `wind_direction` varchar(3) NOT NULL,
+  `icon_id` int(11) default NULL,
+  `forecast_id` int(11) default NULL,
+  `location_id` int(11) NOT NULL,
+  `period_id` int(2) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
@@ -40,12 +40,12 @@ CREATE TABLE  `forecast_detail` (
 --
 
 DROP TABLE IF EXISTS `forecast_icons`;
-CREATE TABLE  `forecast_icons` (
+CREATE TABLE `forecast_icons` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `image` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
 --
 -- Dumping data for table `forecast_icons`
@@ -80,12 +80,38 @@ INSERT INTO `forecast_icons` (`id`, `name`, `image`) VALUES
 --
 
 DROP TABLE IF EXISTS `forecast_locations`;
-CREATE TABLE  `forecast_locations` (
+CREATE TABLE `forecast_locations` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) NOT NULL default '',
   `lat` varchar(255) NOT NULL default '',
   `lon` varchar(255) NOT NULL default '',
   `deleted` int(1) NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
+
+--
+-- Dumping data for table `forecast_locations`
+--
+
+INSERT INTO `forecast_locations` (`id`, `name`, `lat`, `lon`, `deleted`) VALUES
+(1, 'Kigali', '-1.95', '30.059', 0),
+(2, 'Rubavu', '-1.698', '29.371', 0),
+(3, 'Kiburara', '-1.614', '30.39', 0),
+(4, 'Kinyami', '-1.668', '30.117', 0),
+(5, 'Ruhango', '-2.23', '29.78', 0),
+(6, 'Kinigi', ' -1.453', '29.586', 0);
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `forecast_periods`
+--
+
+DROP TABLE IF EXISTS `forecast_periods`;
+CREATE TABLE `forecast_periods` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` text NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
 
@@ -97,16 +123,19 @@ INSERT INTO `forecast_periods` (`id`, `name`) VALUES
 (1, 'morning'),
 (2, 'afternoon');
 
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `forecast_periods`
+-- Table structure for table `warnings`
 --
 
-DROP TABLE IF EXISTS `forecast_periods`;
-CREATE TABLE  `forecast_periods` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` text NOT NULL,
+DROP TABLE IF EXISTS `warnings`;
+CREATE TABLE `warnings` (
+  `id` int(255) NOT NULL auto_increment,
+  `title` varchar(200) NOT NULL,
+  `description` text NOT NULL,
+  `valid_from` datetime NOT NULL,
+  `valid_to` datetime NOT NULL,
+  `type` varchar(10) NOT NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 ;
