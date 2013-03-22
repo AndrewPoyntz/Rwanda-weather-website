@@ -1,12 +1,13 @@
+/* --------- apply to all devices ----------*/
 body{
     font-family: Calibri, Arial, sans-serif;
     text-align:center;
-    font-size:16px;
+    font-size:1em;
     text-align:center;
 	background-color:#F0F0F0;
 }
 #container {
-    width:992px;
+	width:960px;
     margin:0 auto;
     text-align:left;
     border:#009AF4 solid 1px;
@@ -14,21 +15,34 @@ body{
 	box-shadow: 4px 4px 11px 4px #CCCCCC;
 }
 #header {
-    background-image:url('/fileadmin/templates/main/images/banner.png');
-    width:992px;
+    background-image:url('/fileadmin/templates/main/images/banner.jpg');
+    width:100%;
     display:block;
-    height:123px;
+    height:6.25em;
+	border-radius: 14px 14px 0 0;
+	-khtml-border-radius: 14px 14px 0 0;
 }
-#container, #header {
+#container {
 	border-radius: 15px;
-	-moz-border-radius: 15px;
 	-khtml-border-radius: 15px;
-	-webkit-border-radius: 15px;
 }
-#content {
-    margin-top:0;
-    border-top:none;
+#logo{
+	float: left;
+    height: 4.5em;
+    margin: 0.6em;
+    width: 15.250em;
 }
+#headerImages{
+	width:12.5em;
+	float:right;
+	margin:0 0.5em 0 0;
+	height:6.25em;
+}
+#header img {
+	max-width:100%;
+	margin:0 0.5em;
+}
+
 nav {
     background-color: #009AF4;
     display:block;
@@ -42,24 +56,21 @@ nav ul {
 nav ul li {
     display:inline-block;
     border-right: solid 1px #FFF;
-    border-left: solid 1px #FFF;
     *display:inline; /*IE7 hack*/
 }
 nav ul  li:last-child {
     border-right: none;
 }
-nav ul  li:first-child {
-    border-left: none;
-}
 nav a {
     display:inline-block;
-    padding:1.5px 13px 3px;
+    padding:0.2em 0.6em 0.2em;
     text-decoration:none;
     color:#FFF;
 }
 nav a:hover {
     color:#FDD40A;
 }
+
 .active {
     color:#FDD40A;
 }
@@ -75,17 +86,18 @@ nav a:hover {
 #leftColumn ul {
 	margin:0;
 	padding:0;
+	list-style:none;
 }
 #leftColumn ul  li{
     background-color: #1C8F30;
-    margin-bottom: 1px;
+    margin-bottom: 0.1em;
     margin-top: 0;
 }
 #leftColumn a{
 	color:#FFF;
 	text-decoration:none;
 	width:inherit!important;
-	padding:5px;
+	padding:0.3em;
 	display:block;
 }
 #leftColumn .active a, #leftColumn .subActive a, #leftColumn a:hover {
@@ -95,38 +107,47 @@ nav a:hover {
 	display:block;
 }
 #leftColumn ul > ul{
-    margin-left:10px;
+    margin-left:0.5em;
 }
 #center{
     width:76%;
     float:left;
     display:block;
     padding:0 1%;
+	position:relative;
 }
-#center > div{
-    margin-right: 10px;
-    margin-left: 10px;
-    margin-top: 10px;
+#center div{
+    margin: 0.5em 0.0em -0.5em;
 }
-h1 {
-    color: #1C8F30;
-    font-size: 1.3em;
-    margin: 0;
-    padding: 0;
-}
-.clear {
-    clear:both;
-}
-.gap {
+#warning {
+	margin-top:0.1em;
 	display:block;
-	height:1em;
+	font-weight:bold;
+	background-color:#333;
+	color:#fff;
 }
-ul {
-    list-style-type: none;
-    padding-left: 0;
+#warningText{
+	padding:0.5em;
+	font-weight:normal;
+}
+.red {
+	background: #a90329; /* Old browsers */
+	/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2E5MDMyOSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjQ0JSIgc3RvcC1jb2xvcj0iIzhmMDIyMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM2ZDAwMTkiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  #a90329 0%, #8f0222 44%, #6d0019 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a90329), color-stop(44%,#8f0222), color-stop(100%,#6d0019)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #a90329 0%,#8f0222 44%,#6d0019 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#6d0019',GradientType=0 ); /* IE6-8 */
+	border:0.1em solid #000;
+	padding:0em 0.5em;
 }
 /* ################ [HOMEPAGE SPECIFIC] #################*/
 #headlines {
+	height:23em;
+	width:44%;
 }
 #headlines h1 {
 	font-size:1.1em;
@@ -136,11 +157,13 @@ ul {
 	color:#000;
 }
 #map {
-	width:55%;
-	height:22em;
-	float: right;
 	border: 1px solid #9F9F9F;
-	margin-left:0.5em;
+    float: right;
+    height: 22em;
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    width: 55%;
 }
 /* ----- custom zoom controls, because we can & it looks cooler than the defaults :D --------*/
 .olControlAttribution {
@@ -232,15 +255,156 @@ ul {
 	color:#FF0000;
 }
 #todaysForecast {
-	margin-bottom:1em;
+	margin:1em 0;
 }
-/* ################ [HOMEPAGE SPECIFIC] #################*/
+#content {
+    margin-top:0;
+    border-top:none;
+}
+h1 {
+    color: #1C8F30;
+    font-size: 1.3em;
+    margin: 0;
+    padding: 0;
+}
+.icon {
+	height:3em;
+	width:3em;
+}
+.clear {
+    clear:both;
+}
 table{
     border-collapse:collapse;
 }
 footer{
+	margin-top:1em;
     display: block;
-    padding: 5px 0px 5px 10px;
+    padding: 0.4em 0px 0.4em 0.8em;
     border-top:#009AF4 solid 1px;
 }
+/* ################ [HOMEPAGE SPECIFIC] #################*/
+
+/* ------- Desktops and laptops ----------- */
+/* default - what happens for anything with screen resolution over 1024 */
+@media only screen and (max-width : 1024px) {
+	#container {
+		width:960px;
+	}
+}
+@media only screen and (max-width : 960px) {
+	#container {
+		width:100%;
+	}
+}
+
+/* ------------------------ smartphones --------------------*/
+/* -------- (portrait and landscape) ----------- */
+@media only screen and (max-device-width : 480px){ 
+	#container, #header {
+		box-shadow: none;
+		border-radius:0;
+	}
+	/*#header {
+		background-size:200%;
+	}*/
+	#header img {
+		max-height:100%;
+		max-width:100%;
+	}
+	#headerImages{
+		width:28%;
+	}
+	body {
+		font-size:0.8em;
+		background-color:none;
+	}
+	nav li  {
+		outline:1px solid #FFF;
+		border:none;
+	}
+	#leftColumn{
+		width:100%;
+		padding:0.5em 0;
+	}
+	#leftColumn ul li {
+		display:inline-block;
+		width:auto !important;
+		margin-right:0.1em;
+	}
+	#leftColumn a{
+		width:auto !important;
+	}
+	#center{
+		width:100%;
+		padding:1%;
+		position:relative;
+	}
+	#center div{
+		margin: 0;
+	}
+	#headlines, #todaysForecast, #map {
+		float:left;
+		width:98%;
+		position:relative;
+	}
+	#map {
+		margin-left:0.5em;
+		padding:1%;
+	}
+	 #headlines {
+		height:auto;
+	}
+}
+ 
+/* --------------(landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) and (orientation : landscape){ 
+	body{
+		font-size:0.8em;
+	}
+}
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) and (orientation : landscape){ 
+	body{
+		font-size:0.8em;
+	}
+}
+@media only screen and (min-width : 321px) and (max-width : 480px) {
+	#container, #header {
+		box-shadow: none;
+		border-radius:0;
+	}
+	
+}
+ 
+/* --------------(portrait) ----------- */
+@media only screen and (max-width : 320px) {
+	#container, #header {
+		box-shadow: none;
+		border-radius:0;
+	}
+}
+
+/* iPhone 4 ----------- */
+@media only screen and (-webkit-min-device-pixel-ratio : 1.5), only screen and (min-device-pixel-ratio : 1.5) {
+	/* Styles */
+}
+/* ---------------------------------------------------------------------*/
+/* -------------------------- Tablets -------------------------------*/
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+	nav a {
+		padding:0.2em 0.5em 0.2em;
+	}
+} 
+/* iPads (landscape) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : landscape) {
+	/* Styles */
+}
+/* iPads (portrait) ----------- */
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) and (orientation : portrait) {
+	/* Styles */
+}
+
+
+
 

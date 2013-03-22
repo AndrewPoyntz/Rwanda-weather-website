@@ -1,10 +1,4 @@
 <div id="tooltip"></div>
-<div id="map">
-<div id="customZoom">
-	<a href="#customZoomIn" id="customZoomIn">+</a>
-	<a href="#customZoomOut" id="customZoomOut">-</a>
-</div>
-</div>
 <div id="headlines">
 	<h1>
 		Today's weather <br> 
@@ -19,7 +13,6 @@
 		<span class="black">{severe_weather}</span>
 	</h1>
 </div>
-<div class="clear gap"><!-- --></div>
 <div id="todaysForecast">
 	<h1>Local Weather Forecast</h1>
 	<table>
@@ -35,7 +28,7 @@
 			<f:for each="{location.periods}" as="period">
 			<td>
 				<f:for each="{period.detail}" as="detail">
-					<img src="typo3conf/ext/forecastBackend/img/{detail.icon}" alt="{detail.icon_name}_icon">
+					<img src="typo3conf/ext/forecastBackend/img/{detail.icon}" alt="{detail.icon_name}_icon" class="icon">
 					{detail.text} <br>
 					<span class="min">Min {detail.minTemp}&deg;C</span>, <span class="max">Max {detail.maxTemp}&deg;C</span>, Wind {detail.windSpeed} {detail.windDirection}
 				</f:for>
@@ -44,4 +37,10 @@
 		</tr>
 		</f:for>
 	</table>
+</div>
+<div id="map">
+	<div id="customZoom">
+		<a href="#customZoomIn" id="customZoomIn">+</a>
+		<a href="#customZoomOut" id="customZoomOut">-</a>
+	</div>
 </div>
