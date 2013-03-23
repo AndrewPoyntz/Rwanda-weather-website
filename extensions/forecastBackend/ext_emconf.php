@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "forecastBackend".
 #
-# Auto generated 23-03-2013 18:38
+# Auto generated 23-03-2013 18:45
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next

@@ -21,6 +21,7 @@ if (!$staticData){
 <link rel="stylesheet" href="<?php echo $ext_path; ?>/css/jquery-ui-1.10.2.min.css" />
 <link rel="stylesheet" href="<?php echo $ext_path; ?>/css/main.css" />
 <link rel="stylesheet" href="<?php echo $ext_path; ?>/css/locations.css" />
+<div id="screen"><!-- --></div>
 <div id="message"><!-- --></div>
 <div id="container">
 	<h1>Forecast</h1>
@@ -52,7 +53,7 @@ if (!$staticData){
 				<div id="forecastEdit" style="display:none;">
 					<h3>Edit forecast</h3>
 				<div id="forecastEditFormContainer"></div>
-					<button id="cancelEdit">Cancel</button>
+					<button id="forecastCancelEdit">Cancel</button>
 				</div>
 			</div>
 		</div>
@@ -101,7 +102,7 @@ if (!$staticData){
 					</tr>
 					<tr>
 						<td><input type="hidden" name="locId" /></td>
-						<td><input type="submit" value="Update" /><button id="cancelEdit">Cancel</button></td>
+						<td><input type="submit" value="Update" /><button id="locCancelEdit">Cancel</button></td>
 					</tr>
 				</table>
 				</form>
@@ -119,7 +120,7 @@ if (!$staticData){
 					</tr>
 					<tr>
 						<td>Content</td>
-						<td><input type="text" name="warnDescription" /></td>
+						<td><textarea name="warnDescription"></textarea></td>
 					</tr>
 					<tr>
 						<td>Valid from:</td>
@@ -131,7 +132,13 @@ if (!$staticData){
 					</tr>
 					<tr>
 						<td>Type:</td>
-						<td><input type="text" name="warnType" /></td>
+						<td>
+							<select name="warnType">
+								<option value="yellow">Yellow</option>								
+								<option value="orange">Orange</option>								
+								<option value="red">Red</option>								
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
@@ -152,7 +159,7 @@ if (!$staticData){
 					</tr>
 					<tr>
 						<td>Content</td>
-						<td><input type="text" name="warnDescription" /></td>
+						<td><textarea name="warnDescription"></textarea></td>
 					</tr>
 					<tr>
 						<td>Valid from:</td>
@@ -164,11 +171,17 @@ if (!$staticData){
 					</tr>
 					<tr>
 						<td>Type:</td>
-						<td><input type="text" name="warnType" /></td>
+						<td>
+							<select name="warnType">
+								<option value="yellow">Yellow</option>								
+								<option value="orange">Orange</option>								
+								<option value="red">Red</option>								
+							</select>
+						</td>
 					</tr>
 					<tr>
 						<td><input type="hidden" name="warnId" /></td>
-						<td><input type="submit" value="Update" /><button id="cancelEdit">Cancel</button></td>
+						<td><input type="submit" value="Update" /><button id="warnCancelEdit">Cancel</button></td>
 					</tr>
 				</table>
 				</form>

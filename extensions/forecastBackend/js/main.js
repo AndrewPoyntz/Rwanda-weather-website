@@ -46,8 +46,15 @@ var f = {
 		}
 		return el;
 	},
+	showScreen: function () {
+		$('#screen').stop().show().fadeTo("fast", 0.6, function() {
+			$('#message').stop().html('Working...').removeClass('pass').removeClass('fail').addClass('working').show();
+		});
+	},
 	showMessage: function (type, message) {
-		$('#message').stop().hide().removeClass('pass').removeClass('fail').addClass(type).html(message).fadeToggle('slow').delay(1000).fadeToggle('slow');
+		$('#message').stop().hide().removeClass('working').addClass(type).html(message).fadeToggle('slow').delay(1000).fadeToggle('slow', function(){
+			$('#screen').stop().fadeTo("fast", 0).hide();
+		});
 	},
 	forecast: { //container for all functions relating to the forecast tab - f.forecast.[function]()
 		init: function () {
@@ -68,7 +75,7 @@ var f = {
 				f.forecast.registerEvents();
 				return false;
 			});
-			$('#cancelEdit').unbind().click( function () {
+			$('#forecastCancelEdit').unbind().click( function () {
 				f.forecast.hideEdit();
 				return false;
 			});
@@ -377,6 +384,7 @@ var f = {
 			}
 		},
 		issue: function (form) {
+			f.showScreen();
 			$.ajax({
 				type: 'POST',
 				url: ext_loc + 'controller_forecast.php?action=issue',
@@ -492,13 +500,14 @@ var f = {
 				}
 				return false;
 			});
-			$('#cancelEdit').unbind().click(function () {
+			$('#locCancelEdit').unbind().click(function () {
 				f.locations.hideEdit();
 				return false;
 			});
 		},
 		processAdd: function () {
 			var form = $('#locFormAdd');
+			f.showScreen();
 			$.ajax({
 				url: ext_loc + 'controller_location.php',
 				data: form.serialize() + '&action=add',
@@ -516,6 +525,7 @@ var f = {
 		},
 		processEdit: function () {
 			var form = $('#locFormEdit');
+			f.showScreen();
 			$.ajax({
 				url: ext_loc + 'controller_location.php',
 				data: form.serialize() + '&action=update',
@@ -532,6 +542,7 @@ var f = {
 			});
 		},
 		processDelete: function (id) {
+			f.showScreen();
 			$.ajax({
 				url: ext_loc + 'controller_location.php',
 				data: 'locId=' + id + '&action=delete',
@@ -561,10 +572,14 @@ var f = {
 				if (warning.id === id) {
 					$('#warnFormEdit input[name=warnId]').val(warning.id);
 					$('#warnFormEdit input[name=warnTitle]').val(warning.title);
-					$('#warnFormEdit input[name=warnDescription]').val(warning.description);
+					$('#warnFormEdit textarea').html(warning.description);
 					$('#warnFormEdit input[name=warnValidFrom]').val(warning.validFrom);
 					$('#warnFormEdit input[name=warnValidTo]').val(warning.validTo);
-					$('#warnFormEdit input[name=warnType]').val(warning.type);
+					$('#warnFormEdit select').children().each(function () {
+						if ($(this).val() === warning.type){
+							$(this).attr('selected', 'selected');
+						}
+					});
 				}
 			}
 		},
@@ -572,6 +587,7 @@ var f = {
 			$('#warnEdit').fadeOut('fast');
 			$('#warnMain').fadeIn('slow');
 			$('#warnFormEdit input[type=text], #warnFormEdit input[type=hidden]').val('');
+			$('#warnFormEdit textarea').html('');
 		},
 		list: [],
 		getWarningList: function () {
@@ -660,13 +676,14 @@ var f = {
 				}
 				return false;
 			});
-			$('#cancelEdit').unbind().click(function () {
+			$('#warnCancelEdit').unbind().click(function () {
 				f.warnings.hideEdit();
 				return false;
 			});
 		},
 		processAdd: function () {
 			var form = $('#warnFormAdd');
+			f.showScreen();
 			$.ajax({
 				url: ext_loc + 'controller_warning.php',
 				data: form.serialize() + '&action=add',
@@ -684,6 +701,7 @@ var f = {
 		},
 		processEdit: function () {
 			var form = $('#warnFormEdit');
+			f.showScreen();
 			$.ajax({
 				url: ext_loc + 'controller_warning.php',
 				data: form.serialize() + '&action=update',
@@ -700,6 +718,7 @@ var f = {
 			});
 		},
 		processDelete: function (id) {
+			f.showScreen();
 			$.ajax({
 				url: ext_loc + 'controller_warning.php',
 				data: 'locId=' + id + '&action=delete',
