@@ -88,14 +88,24 @@ extends Tx_Extbase_MVC_Controller_ActionController {
 		return $current_forecast_Q;
 	}
 	private function getCurrentWarnings($date){
-		$current_warnings_Q = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'warnings', "valid_from < '".$date."' AND valid_to > '".$date."'", '', 'valid_from');
+		$warnings_array = array();
+		$current_warnings_Q = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'warnings', "valid_from < '".$date."' AND valid_to > '".$date."'", '', 'type');
 		$num_warnings = $GLOBALS['TYPO3_DB']->sql_num_rows($current_warnings_Q);
 		if ($num_warnings > 0){
-			$this->view->assign('warning', true);
+			$this->view->assign('warningExists', true);
 		} else {
-			$this->view->assign('warning', false);
+			$this->view->assign('warningExists', false);
 		}
-		return $current_warnings_Q;
+		while ($current_warning = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($current_warnings_Q)){
+			$warningTime = date('jS M H:i', strtotime($current_warning['valid_from'])) . " - " . date('jS M H:i', strtotime($current_warning['valid_to']));
+			$warnings_array[] = array(
+				'title' => stripslashes($current_warning['title']),
+				'content' => stripslashes($current_warning['description']),
+				'time' => $warningTime,
+				'type' => $current_warning['type']
+			);
+		}
+		return $warnings_array;
 	}
 	private function getLocations($forecast_id){		
 		
@@ -171,12 +181,7 @@ extends Tx_Extbase_MVC_Controller_ActionController {
 		$this->view->assign('severe_weather', $severe_weather);
 		
 		$current_warnings = $this->getCurrentWarnings($todayTime);
-		$current_warning = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($current_warnings);
-		$warning_time = date('jS M H:i', strtotime($current_warning['valid_from'])) . " - " . date('jS M H:i', strtotime($current_warning['valid_to']));
-		$this->view->assign('warningTitle', $current_warning['title']);
-		$this->view->assign('warningContent', $current_warning['description']);
-		$this->view->assign('warningTime', $warning_time);
-		$this->view->assign('warningType', $current_warning['type']);
+		$this->view->assign('warnings', $current_warnings);
 		
 		$this->view->assign('mapData', $this->getMapData($today));
 	}

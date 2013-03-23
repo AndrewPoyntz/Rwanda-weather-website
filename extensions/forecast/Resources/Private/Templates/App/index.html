@@ -1,9 +1,3 @@
-<f:if condition="{warning}">
-<div id="warning">
-	<div id="warningTitle" class="{warningType}">{warningTitle}</div>
-	<div id="warningText">{warningContent} <span class="validTime">Valid: {warningTime}</span></div>
-</div>
-</f:if>
 <div id="headlines">
 	<h1>
 		Today's weather <br> 
@@ -13,10 +7,18 @@
 		Headline <br>
 		<span class="black">{headline}</span>
 	</h1>
-	<h1>
-		Severe Weather <br>
-		<span class="black">{severe_weather}</span>
-	</h1>
+<f:if condition="{warningExists}">
+	<h1 class="severe">Severe Weather</h1>
+	<f:for each="{warnings}" as="warning">
+	<div class="warning">
+		<div class="warningTitle {warning.type}">{warning.title}</div>
+		<div class="warningText">
+			{warning.content}<br>
+			<span class="validTime">Valid: {warning.time}</span>
+		</div>
+	</div>
+	</f:for>
+</f:if>
 </div>
 <div id="todaysForecast">
 	<h1>Local Weather Forecast</h1>

@@ -209,12 +209,12 @@ var f = {
 				//-------------------------------------
 				tr = f.makeElement('tr');
 				table.appendChild(tr);
-				td = f.makeElement('td', 'Severe weather :');
+				td = f.makeElement('td', '&nbsp;');
 				tr.appendChild(td);
 				// --------------------
 				td = f.makeElement('td');
 				input = f.makeElement('input', '', 'name', 'severe_weather');
-				input.setAttribute('type', 'text');
+				input.setAttribute('type', 'hidden');
 				if (data.severeWeather !== null){
 					input.setAttribute('value', data.severeWeather);
 				}
@@ -696,6 +696,7 @@ var f = {
 						f.showMessage('fail', 'Error adding warning');
 					}
 					$('#warnFormAdd input[type=text]').val('');
+					$('#warnFormAdd textarea').html('');
 				}
 			});
 		},
@@ -711,6 +712,7 @@ var f = {
 						f.warnings.getWarningList();
 						f.warnings.hideEdit();
 						$('#warnFormEdit input[type=text]').val('');
+						$('#warnFormEdit textarea').html('');
 					} else {
 						f.showMessage('fail', 'Error updating warning');
 					}
