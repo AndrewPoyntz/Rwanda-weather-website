@@ -175,6 +175,7 @@ extends Tx_Extbase_MVC_Controller_ActionController {
 		}
 		
 		$rows = $this->getLocations($forecast_id);
+		$this->view->assign('forecastIssued', (count($rows) > 0 ? true : false));
 		$this->view->assign('locations', $rows);
 		$this->view->assign('date', date('D jS F Y', strtotime($today)));
 		$this->view->assign('headline', $headline);

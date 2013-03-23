@@ -1,12 +1,15 @@
 <div id="headlines">
-	<h1>
-		Today's weather <br> 
-		<span class="black">{date}</span>
-	</h1>
-	<h1>
-		Headline <br>
-		<span class="black">{headline}</span>
-	</h1>
+	<h1>Today's weather</h1>
+	<h2>{date}</h2>
+<f:if condition="{forecastIssued}">
+	<f:then>
+    <h1>Headline</h1>
+	<h2>{headline}</h2>
+	</f:then>
+	<f:else>
+	<p>A Forecast has not been issued for today</p>
+    </f:else>
+</f:if>
 <f:if condition="{warningExists}">
 	<h1 class="severe">Severe Weather</h1>
 	<f:for each="{warnings}" as="warning">
@@ -20,6 +23,8 @@
 	</f:for>
 </f:if>
 </div>
+
+<f:if condition="{forecastIssued}">
 <div id="todaysForecast">
 	<h1>Local Weather Forecast</h1>
 	<table>
@@ -45,6 +50,7 @@
 		</f:for>
 	</table>
 </div>
+</f:if>
 <div id="mapData" style="display:none">{mapData}</div>
 <div id="map">
 	<div id="customZoom">
