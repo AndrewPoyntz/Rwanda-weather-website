@@ -669,8 +669,8 @@ var f = {
 			});
 			$('#warningsTable .delete').unbind().click(function () {
 				var id = $(this).parent().attr('data-id'),
-					name = $(this).parent().prev().prev().prev().prev().html(); //this feels messy...
-				if (confirm('Are you sure you want to delete \'' + name + '\'?')) {
+					name = $(this).parent().prev().prev().prev().prev().prev().prev().html(); //this feels messy...
+				if (confirm('Are you sure you want to delete the warning: \'' + name + '\'?')) {
 					f.warnings.processDelete(id);
 					return false;
 				}
@@ -721,7 +721,7 @@ var f = {
 			f.showScreen();
 			$.ajax({
 				url: ext_loc + 'controller_warning.php',
-				data: 'locId=' + id + '&action=delete',
+				data: 'warnId=' + id + '&action=delete',
 				success: function (data) {
 					if (data.result) {
 						f.showMessage('pass', 'Warning deleted!');

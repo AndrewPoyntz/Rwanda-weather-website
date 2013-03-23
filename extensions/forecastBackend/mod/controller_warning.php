@@ -19,8 +19,8 @@ switch ($action) {
 				'id' => $warning['id'],
 				'title' => $warning['title'],
 				'description' => $warning['description'],
-				'validFrom' => $warning['valid_from'],
-				'validTo' => $warning['valid_to'],
+				'validFrom' => date('jS M,  H:i', strtotime($warning['valid_from'])),
+				'validTo' => date('jS M, H:i', strtotime($warning['valid_to'])),
 				'type' => $warning['type']
 			);
 		}
