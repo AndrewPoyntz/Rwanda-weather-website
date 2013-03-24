@@ -17,8 +17,8 @@ switch ($action) {
 		while ($warning = $warnings->fetch()) {
 			$warningList[] = array(
 				'id' => $warning['id'],
-				'title' => $warning['title'],
-				'description' => $warning['description'],
+				'title' => stripslashes($warning['title']),
+				'description' => stripslashes($warning['description']),
 				'validFrom' => date('jS M,  H:i', strtotime($warning['valid_from'])),
 				'validTo' => date('jS M, H:i', strtotime($warning['valid_to'])),
 				'type' => $warning['type']

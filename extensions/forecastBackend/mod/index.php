@@ -41,6 +41,7 @@ if (!$staticData){
 			</div>
 			<div id="forecastNew" style="display:none;">
 				<h3>Issue a new forecast</h3>
+				<button class="forecastCancel">Cancel</button>
 				<div id="forecastNewFormContainer"></div>
 				<button class="forecastCancel">Cancel</button>
 			</div>

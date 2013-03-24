@@ -147,7 +147,7 @@ class forecast {
 						'icon' => $icon_image,
 						'iconName' => $icon_name,
 						'iconId' => $icon_id,
-						'text' => $text,
+						'text' => stripslashes($text),
 						'minTemp' => $min_temp,
 						'maxTemp' => $max_temp,
 						'windSpeed' => $wind_speed,
@@ -179,7 +179,7 @@ class forecast {
 		while ($location = $locations->fetch()){
 			$location_list[] = array(
 				'id' => $location["id"],
-				'name' => $location["name"],
+				'name' => stripslashes($location["name"]),
 				'lon' => $location["lat"],
 				'lon' => $location["lon"]
 			);
@@ -193,7 +193,7 @@ class forecast {
 		while ($period = $periods->fetch()){
 			$period_list[] = array(
 				'id' => $period["id"],
-				'name' => $period["name"]
+				'name' => stripslashes($period["name"])
 			);
 		}
 		return $period_list;
@@ -205,7 +205,7 @@ class forecast {
 		while ($icon = $icons->fetch()) {
 			$icon_list[] = array(
 				'id' => $icon['id'],
-				'name' => $icon['name'],
+				'name' => stripslashes($icon['name']),
 				'image' => $icon['image']
 			);
 		}

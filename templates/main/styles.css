@@ -120,6 +120,35 @@ nav a:hover {
 #center div{
     margin: 0.5em 0.0em -0.5em;
 }
+h1 {
+    color: #1C8F30;
+    font-size: 1.4em;
+	margin-top:0em;
+}
+h2 {
+    color: #000;
+    font-size: 1.2em;
+}
+h2 {
+    color: #000;
+    font-size: 1.1em;
+}
+.icon {
+	height:3em;
+	width:3em;
+}
+.clear {
+    clear:both;
+}
+table{
+    border-collapse:collapse;
+}
+footer{
+	margin-top:1em;
+    display: block;
+    padding: 0.4em 0px 0.4em 0.8em;
+    border-top:#009AF4 solid 1px;
+}
 /* ################ [HOMEPAGE SPECIFIC] #################*/
 #headlines {
 	height:23em;
@@ -270,6 +299,7 @@ nav a:hover {
 	border:1px solid #000;
 	border-bottom:none;
 	margin-top:1em;
+	margin-bottom:0;
 }
 #todaysForecast table {
 	border: 1px solid #000;
@@ -303,35 +333,7 @@ nav a:hover {
     margin-top:0;
     border-top:none;
 }
-h1 {
-    color: #1C8F30;
-    font-size: 1.4em;
-	margin-top:0em;
-}
-h2 {
-    color: #000;
-    font-size: 1.2em;
-}
-h2 {
-    color: #000;
-    font-size: 1.1em;
-}
-.icon {
-	height:3em;
-	width:3em;
-}
-.clear {
-    clear:both;
-}
-table{
-    border-collapse:collapse;
-}
-footer{
-	margin-top:1em;
-    display: block;
-    padding: 0.4em 0px 0.4em 0.8em;
-    border-top:#009AF4 solid 1px;
-}
+
 /* ################ [HOMEPAGE SPECIFIC] #################*/
 
 /* ------- Desktops and laptops ----------- */

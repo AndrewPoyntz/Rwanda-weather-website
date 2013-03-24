@@ -1,6 +1,8 @@
 /*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:true, undef:true, unused:true, curly:true, browser:true, jquery:true, indent:4, maxerr:50 */
 //stuff to run on pageload
 $(document).ready(function () {
+	console.log($(this));
+	console.log($('#toggle-tree', top.document));
 	f.defaultClickEvents(); // register the global click events
 });
 
@@ -23,6 +25,7 @@ var f = {
 			$(this).addClass('active');
 			$('#locationsManagement').show();
 			$('#forecast, #warningsManagement').hide();
+			f.warnings.hideEdit();
 			f.locations.init();
 		});
 		$('#warningsTab').click(function () {
@@ -30,6 +33,7 @@ var f = {
 			$(this).addClass('active');
 			$('#warningsManagement').show();
 			$('#forecast, #locationsManagement').hide();
+			f.locations.hideEdit();
 			f.warnings.init();
 		});
 	},
@@ -52,8 +56,9 @@ var f = {
 		});
 	},
 	showMessage: function (type, message) {
-		$('#message').stop().hide().removeClass('working').addClass(type).html(message).fadeToggle('slow').delay(1000).fadeToggle('slow', function(){
-			$('#screen').stop().fadeTo("fast", 0).hide();
+		$('#screen').clearQueue().stop().show().css('opacity',0.6);
+		$('#message').clearQueue().stop().removeClass('working').addClass(type).html(message).fadeIn('slow').delay(1000).fadeToggle('slow', function(){
+			$('#screen').fadeTo("fast", 0).hide();
 		});
 	},
 	forecast: { //container for all functions relating to the forecast tab - f.forecast.[function]()
@@ -182,7 +187,6 @@ var f = {
 				input.setAttribute('class', 'dateInput');
 				if (data.issueTime !== null){
 					input.setAttribute('value', data.issueTime);
-					console.log(data.issueTime);
 				}
 				td.appendChild(input);
 				if (data.id !== null){
@@ -377,7 +381,6 @@ var f = {
 				});
 				$('#' + formDiv + ' .dateInput').datepicker({dateFormat:'yy-mm-dd'});
 				$('#' + formDiv.substring(0, formDiv.length - 9)).unbind().submit(function () {
-					console.log('form submitted');
 					f.forecast.issue($(this));
 					return false;
 				});
@@ -506,40 +509,53 @@ var f = {
 			});
 		},
 		processAdd: function () {
-			var form = $('#locFormAdd');
+			var form = $('#locFormAdd'), valid = true;
 			f.showScreen();
-			$.ajax({
-				url: ext_loc + 'controller_location.php',
-				data: form.serialize() + '&action=add',
-				success: function (data) {
-				console.log(data);
-					if (data.result) {
-						f.showMessage('pass', 'Location added!');
-						f.locations.getLocationList();
-					} else {
-						f.showMessage('fail', 'Error adding location');
+			valid = ($('#locFormAdd input[name=locName]').val() !== "") ? valid : false;
+			valid = ($('#locFormAdd input[name=locLat]').val() !== "") ? valid : false;
+			valid = ($('#locFormAdd input[name=locLon]').val() !== "") ? valid : false;
+			if (valid){
+				$.ajax({
+					url: ext_loc + 'controller_location.php',
+					data: form.serialize() + '&action=add',
+					success: function (data) {
+						if (data.result) {
+							f.showMessage('pass', 'Location added!');
+							f.locations.getLocationList();
+						} else {
+							f.showMessage('fail', 'Error adding location');
+						}
+						$('#locFormAdd input[type=text]').val('');
 					}
-					$('#locFormAdd input[type=text]').val('');
-				}
-			});
+				});
+			} else {
+				f.showMessage('fail', 'Please fill out all fields on the form.');
+			}
 		},
 		processEdit: function () {
-			var form = $('#locFormEdit');
+			var form = $('#locFormEdit'), valid = true;
 			f.showScreen();
-			$.ajax({
-				url: ext_loc + 'controller_location.php',
-				data: form.serialize() + '&action=update',
-				success: function (data) {
-					if (data.result) {
-						f.showMessage('pass', 'Location updated!');
-						f.locations.getLocationList();
-						f.locations.hideEdit();
-						$('#locFormEdit input[type=text]').val('');
-					} else {
-						f.showMessage('fail', 'Error updating location');
+			valid = ($('#locFormEdit input[name=locName]').val() !== "") ? valid : false;
+			valid = ($('#locFormEdit input[name=locLat]').val() !== "") ? valid : false;
+			valid = ($('#locFormEdit input[name=locLon]').val() !== "") ? valid : false;
+			if (valid){
+				$.ajax({
+					url: ext_loc + 'controller_location.php',
+					data: form.serialize() + '&action=update',
+					success: function (data) {
+						if (data.result) {
+							f.showMessage('pass', 'Location updated!');
+							f.locations.getLocationList();
+							f.locations.hideEdit();
+							$('#locFormEdit input[type=text]').val('');
+						} else {
+							f.showMessage('fail', 'Error updating location');
+						}
 					}
-				}
-			});
+				});
+			} else {
+				f.showMessage('fail', 'Please fill out all fields on the form.');
+			}
 		},
 		processDelete: function (id) {
 			f.showScreen();
@@ -682,42 +698,57 @@ var f = {
 			});
 		},
 		processAdd: function () {
-			var form = $('#warnFormAdd');
+			var form = $('#warnFormAdd'), valid = true;
 			f.showScreen();
-			$.ajax({
-				url: ext_loc + 'controller_warning.php',
-				data: form.serialize() + '&action=add',
-				success: function (data) {
-				console.log(data);
-					if (data.result) {
-						f.showMessage('pass', 'Warning added!');
-						f.warnings.getWarningList();
-					} else {
-						f.showMessage('fail', 'Error adding warning');
+			valid = ($('#warnFormAdd input[name=warnTitle]').val() !== "") ? valid : false;
+			valid = ($('#warnFormAdd input[name=warnValidFrom]').val() !== "") ? valid : false;
+			valid = ($('#warnFormAdd input[name=warnValidTo]').val() !== "") ? valid : false;
+			valid = ($('#warnFormAdd textarea').html() !== "") ? valid : false;
+			if (valid){
+				$.ajax({
+					url: ext_loc + 'controller_warning.php',
+					data: form.serialize() + '&action=add',
+					success: function (data) {
+						if (data.result) {
+							f.showMessage('pass', 'Warning added!');
+							f.warnings.getWarningList();
+						} else {
+							f.showMessage('fail', 'Error adding warning');
+						}
+						$('#warnFormAdd input[type=text]').val('');
+						$('#warnFormAdd textarea').html('');
 					}
-					$('#warnFormAdd input[type=text]').val('');
-					$('#warnFormAdd textarea').html('');
-				}
-			});
+				});
+			} else {
+				f.showMessage('fail', 'Please fill out all fields on the form.');
+			}
 		},
 		processEdit: function () {
-			var form = $('#warnFormEdit');
+			var form = $('#warnFormEdit'), valid = true;
 			f.showScreen();
-			$.ajax({
-				url: ext_loc + 'controller_warning.php',
-				data: form.serialize() + '&action=update',
-				success: function (data) {
-					if (data.result) {
-						f.showMessage('pass', 'Warning updated!');
-						f.warnings.getWarningList();
-						f.warnings.hideEdit();
-						$('#warnFormEdit input[type=text]').val('');
-						$('#warnFormEdit textarea').html('');
-					} else {
-						f.showMessage('fail', 'Error updating warning');
+			valid = ($('#warnFormEdit input[name=warnTitle]').val() !== "") ? valid : false;
+			valid = ($('#warnFormEdit input[name=warnValidFrom]').val() !== "") ? valid : false;
+			valid = ($('#warnFormEdit input[name=warnValidTo]').val() !== "") ? valid : false;
+			valid = ($('#warnFormEdit textarea').html() !== "") ? valid : false;
+			if (valid){
+				$.ajax({
+					url: ext_loc + 'controller_warning.php',
+					data: form.serialize() + '&action=update',
+					success: function (data) {
+						if (data.result) {
+							f.showMessage('pass', 'Warning updated!');
+							f.warnings.getWarningList();
+							f.warnings.hideEdit();
+							$('#warnFormEdit input[type=text]').val('');
+							$('#warnFormEdit textarea').html('');
+						} else {
+							f.showMessage('fail', 'Error updating warning');
+						}
 					}
-				}
-			});
+				});
+			} else {
+				f.showMessage('fail', 'Please fill out all fields on the form.');
+			}
 		},
 		processDelete: function (id) {
 			f.showScreen();
