@@ -1,14 +1,24 @@
 /*jshint forin:true, noarg:true, noempty:true, eqeqeq:true, bitwise:true, undef:true, unused:true, curly:true, browser:true, jquery:true, indent:4, maxerr:50 */
-//stuff to run on pageload
-$(document).ready(function () {
-	console.log($(this));
-	console.log($('#toggle-tree', top.document));
-	f.defaultClickEvents(); // register the global click events
-});
 
 // global location of extension (useful for ajax requests)
 var ext_loc = "/typo3conf/ext/forecastBackend/mod/",
 	ext_root = "/typo3conf/ext/forecastBackend/";
+//stuff to run on pageload
+$(document).ready(function () {
+	if (typeof firstRun !== 'undefined') { // need to install some static data
+		$('#install').click(function() {
+			$.ajax({
+				url: ext_loc + 'insert_static.php',
+				async: false,
+				success: function (data) {
+					$('#firstContent').html('The data has been installed successfully, please now refresh the page & re-open the xtension to start using it!');
+					return false;
+				}
+			});
+		});
+	}
+	f.defaultClickEvents(); // register the global click events
+});
 // global to contain all other functions (short name to save typing "#lazycoder")
 var f = {
 	defaultClickEvents: function () {

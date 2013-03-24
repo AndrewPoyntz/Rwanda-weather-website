@@ -395,7 +395,8 @@ footer{
 		position:relative;
 	}
 	#map {
-		margin-left:0.5em;
+		width:95.1%;
+		margin-left:0.5em !important;
 		padding:1%;
 	}
 	 #headlines {

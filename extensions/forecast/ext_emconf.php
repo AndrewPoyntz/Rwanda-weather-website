@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "forecast".
 #
-# Auto generated 24-03-2013 19:55
+# Auto generated 24-03-2013 21:17
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
