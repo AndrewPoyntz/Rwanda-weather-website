@@ -4,7 +4,7 @@ class Tx_Forecast_Controller_AppController
 extends Tx_Extbase_MVC_Controller_ActionController {
 	public function initializeAction() {
 	$headers = "<script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\"></script>
-<script src=\"http://openlayers.org/api/OpenLayers.js\"></script> 
+<script src=\"/fileadmin/templates/main/OpenLayers.js\"></script> 
 <script src=\"/fileadmin/templates/main/map.js\"></script>";
 		$GLOBALS['TSFE']->additionalHeaderData['custom headers'] = $headers;
 	}

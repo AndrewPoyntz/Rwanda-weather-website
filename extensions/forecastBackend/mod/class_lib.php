@@ -108,8 +108,13 @@ class forecast {
 		global $db;
 		$i = 0;
 		$locations_array = array();
-		$locations			= $db->prepare("SELECT distinct name, forecast_locations.id FROM forecast_locations, forecast_detail WHERE forecast_detail.location_id = forecast_locations.id");
-		$periods 			= $db->prepare("SELECT distinct name, forecast_periods.id FROM forecast_periods, forecast_detail WHERE forecast_detail.period_id = forecast_periods.id");
+		if (!empty($forecast_id)){
+			$locations			= $db->prepare("SELECT distinct name, forecast_locations.id FROM forecast_locations, forecast_detail WHERE forecast_detail.location_id = forecast_locations.id");
+			$periods 			= $db->prepare("SELECT distinct name, forecast_periods.id FROM forecast_periods, forecast_detail WHERE forecast_detail.period_id = forecast_periods.id");
+		} else {
+			$locations			= $db->prepare("SELECT distinct name, forecast_locations.id FROM forecast_locations, forecast_detail");
+			$periods 			= $db->prepare("SELECT distinct name, forecast_periods.id FROM forecast_periods, forecast_detail");
+		}
 		$forecast_details	= $db->prepare("SELECT * FROM forecast_detail WHERE forecast_id = :forecastID AND period_id = :periodID AND location_id = :locationID LIMIT 1");
 		$icons				= $db->prepare("SELECT * FROM forecast_icons WHERE id = :iconID LIMIT 1");
 		$forecast_details->bindParam(':forecastID', $forecast_id);
