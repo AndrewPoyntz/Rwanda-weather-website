@@ -412,3 +412,23 @@ footer{
 		padding:0.2em 0.5em 0.2em;
 	}
 }
+
+/* ############ [PRINT] #########*/
+@media print {
+	#container{
+		border-radius:0;
+		box-shadow:0 0 0 0 #ccc;
+	}
+	#headerImages, nav, #leftColumn, footer{
+		display:none;
+	}
+	.warning{
+		border:1px solid;
+	}
+	.warningTitle {
+		border:none;
+	}
+	.red{background-color: #a90329;}
+	.orange{background-color: #ff9b05;}
+	.yellow{background-color: #fefcea;)
+}
