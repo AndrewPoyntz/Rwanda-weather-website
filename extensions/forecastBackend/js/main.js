@@ -711,9 +711,13 @@ var f = {
 			var form = $('#warnFormAdd'), valid = true;
 			f.showScreen();
 			valid = ($('#warnFormAdd input[name=warnTitle]').val() !== "") ? valid : false;
+			//console.log('title', $('#warnFormAdd input[name=warnTitle]').val(), valid);
 			valid = ($('#warnFormAdd input[name=warnValidFrom]').val() !== "") ? valid : false;
+			//console.log('title', $('#warnFormAdd input[name=warnValidFrom]').val(), valid);
 			valid = ($('#warnFormAdd input[name=warnValidTo]').val() !== "") ? valid : false;
-			valid = ($('#warnFormAdd textarea').html() !== "") ? valid : false;
+			//console.log('title', $('#warnFormAdd input[name=warnValidTo]').val(), valid);
+			valid = ($('#warnFormAdd textarea').val() !== "") ? valid : false;
+			//console.log('title', $('#warnFormAdd textarea').val(), valid);
 			if (valid){
 				$.ajax({
 					url: ext_loc + 'controller_warning.php',
@@ -739,7 +743,7 @@ var f = {
 			valid = ($('#warnFormEdit input[name=warnTitle]').val() !== "") ? valid : false;
 			valid = ($('#warnFormEdit input[name=warnValidFrom]').val() !== "") ? valid : false;
 			valid = ($('#warnFormEdit input[name=warnValidTo]').val() !== "") ? valid : false;
-			valid = ($('#warnFormEdit textarea').html() !== "") ? valid : false;
+			valid = ($('#warnFormEdit textarea').val() !== "") ? valid : false;
 			if (valid){
 				$.ajax({
 					url: ext_loc + 'controller_warning.php',

@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "forecast".
 #
-# Auto generated 24-03-2013 21:17
+# Auto generated 24-03-2013 23:31
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -33,7 +33,7 @@ $EM_CONF[$_EXTKEY] = array(
 		'suggests' => array(
 		),
 	),
-	'_md5_values_when_last_written' => 'a:6:{s:12:"ext_icon.gif";s:4:"96df";s:17:"ext_localconf.php";s:4:"27e8";s:14:"ext_tables.php";s:4:"3088";s:14:"ext_tables.sql";s:4:"9f85";s:36:"Classes/Controller/AppController.php";s:4:"a631";s:42:"Resources/Private/Templates/App/index.html";s:4:"1339";}',
+	'_md5_values_when_last_written' => 'a:6:{s:12:"ext_icon.gif";s:4:"96df";s:17:"ext_localconf.php";s:4:"27e8";s:14:"ext_tables.php";s:4:"3088";s:14:"ext_tables.sql";s:4:"9f85";s:36:"Classes/Controller/AppController.php";s:4:"9d58";s:42:"Resources/Private/Templates/App/index.html";s:4:"1339";}',
 	'suggests' => array(
 	),
 	'conflicts' => '',
